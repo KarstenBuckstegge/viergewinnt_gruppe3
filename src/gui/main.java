@@ -18,6 +18,10 @@ import javafx.event.EventHandler;
 
 
 public class main extends Application {
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
 	@Override
 	public void start(Stage stage) {
 		// background color
@@ -93,9 +97,5 @@ public class main extends Application {
 		stage.setTitle("C. R. U. Destroy");
 		stage.setScene(scene);
 		stage.show();
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
 	}
 }

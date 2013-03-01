@@ -22,16 +22,16 @@ public class test extends Application {
 		launch(args);
 	}
 	
+	private static Integer[] fieldSize = {7, 6};
+	private static Ellipse[][] stones = new Ellipse[fieldSize[0]][fieldSize[1]];
+	
 	@Override
 	public void start(Stage stage) {
 		Group root = new Group();
 		Scene scene = new Scene(root, 800, 600);
 		
-		Integer[] groundSize = {7, 6};
-		Ellipse[][] stones = new Ellipse[groundSize[0]][groundSize[1]];
-		
-		for (int i = 0; i < groundSize[0]; i++) {
-			for (int j = 0; j < groundSize[1]; j++) {
+		for (int i = 0; i < fieldSize[0]; i++) {
+			for (int j = 0; j < fieldSize[1]; j++) {
 				stones[i][j] = new Ellipse(25, 25);
 				stones[i][j].setTranslateX(100 + 75 * i);
 				stones[i][j].setTranslateY(100 + 75 * j);
@@ -45,11 +45,19 @@ public class test extends Application {
 		stage.setScene(scene);
 		stage.show();
 		
-		stones[0][0].setFill(Color.RED);
-		stones[0][1].setFill(Color.BLUE);
+		setMove(0, 5, 2);
+		setMove(1, 2, 1);
 	}
 
-	public void setMove(int column, int row) {
-		// stones[column][row].setFill(Color.BLUE);
+	public static void setMove(int player, int column, int row) {
+		Color stoneColor = Color.BLACK;
+		
+		if (player == 0) {
+			stoneColor = Color.BLUE;
+		} else {
+			stoneColor = Color.RED;
+		}
+		
+		stones[column][row].setFill(stoneColor);
 	}
 }

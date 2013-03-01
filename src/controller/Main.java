@@ -13,7 +13,7 @@ public class Main {
 	 */
 	public static void main (String[] args) {
 		field = new Field();
-		field.dropStone (3, 2);
+		field.dropStone (3, 3);
 
 	}
 

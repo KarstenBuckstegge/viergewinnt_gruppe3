@@ -17,7 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 
-public class main extends Application {
+public class MainGui extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}

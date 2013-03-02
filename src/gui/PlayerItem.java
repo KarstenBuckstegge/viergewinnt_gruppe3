@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.EllipseBuilder;
 import javafx.scene.paint.Color;
 
 public class PlayerItem {
@@ -9,19 +10,19 @@ public class PlayerItem {
 	private int xPos = 0;
 	private int yPos = 0;
 	
-	private Color[] playerPaints = new Color
+	private Color emptyPaint = Color.BLACK;
+	private Color playerOpaint = Color.BLUE;
+	private Color playerXpaint = Color.RED;
 	
-	playerPaints[0] = Color.BLUE;
-	playerPaints[1] = Color.RED;
+	private Ellipse playerItem;
 	
-	private Ellipse playerItem = new Ellipse();
-	playerItem.setTranslateX(100 + 75 * i);
-	playerItem.setTranslateY(100 + 75 * j);
-	playerItem.setFill(this.playerOcolor);
-	
-	public void setItem(int player, int xPos, int yPos) {
-		this.player = player;
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public void createItem(int player, int xPos, int yPos) {
+		this.playerItem = EllipseBuilder.create()
+			.centerX(xPos)
+			.centerY(yPos)
+			.radiusX(this.itemSize)
+			.radiusY(this.itemSize)
+			.fill(emptyPaint)
+			.build();
 	}
 }

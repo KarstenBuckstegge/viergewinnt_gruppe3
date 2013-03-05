@@ -3,7 +3,6 @@ package controller;
 import logic.Field;
 
 public class Main {
-	public static Field field;
 	public static int stone_x;
 	public static int stone_o;
 	public static int turn;
@@ -12,9 +11,15 @@ public class Main {
 	 * @param args
 	 */
 	public static void main (String[] args) {
-		field = new Field();
-		field.dropStone (3, 3);
-
+		Field.createField();
+		// Variablen geben Spalte und Spieler an
+		Field.dropStone (3, 1);
+		Field.dropStone (3, 2);
+		Field.dropStone (3, 1);
+		Field.dropStone (3, 2);
+		Field.dropStone (3, 1);
+		Field.dropStone (3, 2);
+		Field.dropStone (3, 1);
 	}
 
 }

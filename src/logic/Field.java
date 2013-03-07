@@ -4,7 +4,7 @@ import gui.MainGui;
 
 public class Field {
 	
-	public static int [][] field; //createField aufrufen!!!!!!!!!
+	public static int [][] field; //Zugnummern angeben!!!!!!!!! Dokumentation erstellen!!!!!
 	
 	// Erstellen eines zweidimensionalen Arrays als Spielfeld
 	public static void createField(){
@@ -15,7 +15,9 @@ public class Field {
 	// Spieler X ist eine 1 im Array
 	// Spieler O ist eine 2 im Array
 	
-	public static void dropStone(int column, int currentPlayer){
+	public static void setStone(int column
+			//, int currentPlayer
+			){
 		
 		for (int rowCounter=0; rowCounter < 6; rowCounter++){
 			
@@ -29,9 +31,10 @@ public class Field {
 			// Jede Reihe betrachten ob bereits ein Stein enthalten ist.
 			// Ist ein Stein enthalten wird durch die Schleife in die naechste Reihe gesprungen
 			if (field [currentRow][column] == 0) {
+				
 				// Ist kein Stein enthalten wird hier das Feld mit dem Stein des aktuellen Spielers gefuellt 
 				field [currentRow][column] = currentPlayer;
-				//MainGui.setMove(currentPlayer, column, rowCounter-1);
+				//MainGui.setMove(currentPlayer, column, rowCounter);
 				
 				// Stein check
 				System.out.println("Stone droped in row " + currentRow + " and column " + column);

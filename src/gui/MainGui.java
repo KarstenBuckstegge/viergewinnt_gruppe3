@@ -1,6 +1,8 @@
 package gui;
 
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -81,12 +83,26 @@ public class MainGui {
 		// Start Button erstellen
 		Button startButton = new Button("Start");
 		startButton.setPrefSize(200, 50);
+		startButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				setMove(0, 5, 5);
+			}
+		});
 		controlGroup.getChildren().add(startButton);
 		// Beenden Button erstellen
 		Button exitButton = new Button("Exit");
 		exitButton.setPrefSize(200, 50);
+		exitButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				System.out.println("Exit");
+				System.exit(0);
+			}
+		});
 		controlGroup.getChildren().add(exitButton);
-
+		
+		
 		
 		
 		// Steuergruppe dem "Center" Bereich zuweisen

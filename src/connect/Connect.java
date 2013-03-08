@@ -7,7 +7,6 @@ public class Connect {
 	/**
 	 * @param args
 	 */
-	// Kommentar
 	
 	int opMove = 4; // Simuliert Info aus Server-Datei
 	static int move = 3; // Stellvertretend für letzten Zug

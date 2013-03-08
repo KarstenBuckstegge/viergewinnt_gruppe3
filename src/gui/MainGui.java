@@ -62,16 +62,18 @@ public class MainGui {
 		VBox userInputVBox = new VBox();
 		userInputVBox.setSpacing(10);
 		// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
-		ToggleGroup togglePlayerGroup = new ToggleGroup();
+		final ToggleGroup togglePlayerGroup = new ToggleGroup();
 		// RadioButton fuer Spieler O erstellen
 		RadioButton playerO = new RadioButton("Spieler O");
 		playerO.setToggleGroup(togglePlayerGroup);
 		playerO.setSelected(true);
+		playerO.setUserData(0);
 		playerO.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerO);
 		// RadioButton fuer Spieler X erstellen
 		RadioButton playerX = new RadioButton("Spieler X");
 		playerX.setToggleGroup(togglePlayerGroup);
+		playerX.setUserData(1);
 		playerX.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerX);
 		// Eingabefeld fuer Verzeichnisangabe erstellen
@@ -86,7 +88,8 @@ public class MainGui {
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				setMove(0, 5, 5);
+				int player = (Integer) togglePlayerGroup.getSelectedToggle().getUserData();
+				setMove(player, 5, 5);
 			}
 		});
 		controlGroup.getChildren().add(startButton);

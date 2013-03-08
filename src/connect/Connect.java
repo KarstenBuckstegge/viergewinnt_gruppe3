@@ -7,7 +7,7 @@ public class Connect {
 	/**
 	 * @param args
 	 */
-	
+	jk
 	int opMove = 4; // Simuliert Info aus Server-Datei
 	static int move = 3; // Stellvertretend für letzten Zug
 	public static void main(String[] args)

@@ -12,8 +12,9 @@ public class main extends Application {
 	
 	@Override
 	public void start(Stage mainStage) throws InterruptedException {
-		MainGui.initialize(mainStage);
-
-		MainGui.setMove(1, 3, 5);
+		MainGui gui = new MainGui();
+		gui.initialize(mainStage);
+		
+		gui.setMove(1, 3, 5);
 	}
 }

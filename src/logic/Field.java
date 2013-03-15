@@ -1,48 +1,36 @@
 package logic;
 
-import gui.MainGui;
-
 public class Field {
+	private int [][] field;
 	
-	public static int [][] field; //Zugnummern angeben!!!!!!!!! Dokumentation erstellen!!!!!
-	
-	// Erstellen eines zweidimensionalen Arrays als Spielfeld
-	public static void createField(){
+	// Erstellen des Spielfeldes
+	public void createField(){
 		field = new int [6][7];
-		}
+		System.out.println("FIELD CREATED");
+	}
 	
-	// Einfuegen eines Steins in der vorgegebenen Spalte (column)
-	// Spieler X ist eine 1 im Array
-	// Spieler O ist eine 2 im Array
+	// Einen Stein im Feld platzieren
+	public void setStone(int column, int row, int player) { // player: 0 = leer, 1 = x, 2 = o 
+		this.field[column][row] = player;
+	}
 	
-	public static void setStone(int column
-			//, int currentPlayer
-			){
-		
-		for (int rowCounter=0; rowCounter < 6; rowCounter++){
-			
-			int currentRow = 5 - rowCounter;
-			
-			//Operation abfangen wenn Spalte komplett gefuellt
-			if (rowCounter == 5 && field [currentRow][column] != 0) {
-				System.out.println("Die Spalte ist bereits voll!");
-			}
-			
-			// Jede Reihe betrachten ob bereits ein Stein enthalten ist.
-			// Ist ein Stein enthalten wird durch die Schleife in die naechste Reihe gesprungen
-			if (field [currentRow][column] == 0) {
-				
-				// Ist kein Stein enthalten wird hier das Feld mit dem Stein des aktuellen Spielers gefuellt 
-				field [currentRow][column] = currentPlayer;
-				//MainGui.setMove(currentPlayer, column, rowCounter);
-				
-				// Stein check
-				System.out.println("Stone droped in row " + currentRow + " and column " + column);
-				System.out.println(field [currentRow][column]);
-				
-				// Beenden der for-Schleife
-				rowCounter = 7;
+	// Auslesen welcher Stein an entsprechender Position liegt
+	public int getPlayer(int column, int row) { // player: 0 = leer, 1 = x, 2 = o 
+		System.out.println("column: " + column + " row: " + row);
+		int test = this.field[column][row];
+		System.out.println(test);
+		return this.field[column][row];
+	}
+	
+	// Das komplette Feld inclusive Steine ausgeben
+	public int [][] getField() {
+		int [][] tmp_field = new int[6][7];
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 7; j++) {
+				tmp_field[i][j] = this.getPlayer(i, j);
 			};
 		};
+		return tmp_field;
 	}
+	
 }

@@ -1,27 +1,25 @@
 package controller;
 
-import logic.Field;
 import logic.KI;
+import logic.FindRow;
+import logic.Field;
 
 public class Main {
-	public static int stone_x;
-	public static int stone_o;
-	public static int turn;
+	public int turn;
+	public static Field field;
 
 	/**
 	 * @param args
 	 */
 	public static void main (String[] args) {
-		Field.createField();
+		FindRow findrow = new FindRow();
+		field = new Field();
+		KI ki = new KI();
+		field.createField();
 		// Variablen geben Spalte und Spieler an
-		Field.setStone (3, 1);
-		Field.setStone (3, 2);
-		Field.setStone (3, 1);
-		Field.setStone (3, 2);
-		Field.setStone (3, 1);
-		Field.setStone (3, 2);
-		Field.setStone (3, 1);
-		KI.checkThreeRow();
+		findrow.getRow (4);
+		findrow.getRow (4);
+		ki.calcStone();
 	}
 
 }

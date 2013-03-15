@@ -4,5 +4,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="at.bestsolution.efxclipse.tooling.jdt.core.JAVAFX_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/fxlib"/>
+	<classpathentry kind="lib" path="lib/jdom-2.0.4/jdom-2.0.4.jar" sourcepath="lib/jdom-2.0.4/jdom-2.0.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/Chris/Dropbox/05_Projekte/Git/viergewinnt_gruppe3/lib/jdom-2.0.4/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

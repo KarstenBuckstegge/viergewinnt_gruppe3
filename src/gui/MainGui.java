@@ -18,22 +18,32 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.Group;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 
 public class MainGui {
-	private static final int HOLE_SPACING = 90;
-	private static final int COLUMNS = 7;
-	private static final int ROWS = 6;
-	private static final int PLAYER_XOFFSET = 37;
-	private static final int PLAYER_YOFFSET = 38;
+	private final int COLUMNS = 7;
+	private final int ROWS = 6;
+	private final int HOLE_SPACING = 90;
+	private final int PLAYER_XOFFSET = 37;
+	private final int PLAYER_YOFFSET = 38;
 	
-	private static final Image PLAYERO_IMG = new Image("/images/playerO.png", true);
-	private static final Image PLAYERX_IMG = new Image("/images/playerX.png", true);
+	private final Image PLAYERO_IMG = new Image("/images/playerO.png", true);
+	private final Image PLAYERX_IMG = new Image("/images/playerX.png", true);
 	
-	private static Pane gamefield = new Pane();
+	private Pane gamefield = new Pane();
 	
-	private static Color bgColor = Color.rgb(31, 31, 31);
+	private Color bgColor = Color.rgb(31, 31, 31);
 	
-	public static void initialize(Stage mainStage)
+	// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
+	final ToggleGroup togglePlayerGroup = new ToggleGroup();
+	
+	/**
+	 * Baut das Hauptfenster mit Spielfeld und Steuerelementen auf
+	 * 
+	 * @param mainStage
+	 */
+	public void initialize(Stage mainStage)
 	{
 		// Spielfeld definieren
 		gamefield.setMaxWidth(HOLE_SPACING * COLUMNS + 50);
@@ -54,6 +64,9 @@ public class MainGui {
 		BorderPane.setMargin(gamefield, new Insets(20, 0, 0, 0));
 		root.setCenter(gamefield);
 		
+		// Neue Spielstandanzeige erstellen
+		final ScoreBoard score = new ScoreBoard(root);
+		
 		// Honrizontale Box fuer Steuerelemente erstellen
 		HBox controlGroup = new HBox();
 		controlGroup.setSpacing(20);
@@ -61,17 +74,17 @@ public class MainGui {
 		// Vertikale Box fuer Benutzereingaben erstellen
 		VBox userInputVBox = new VBox();
 		userInputVBox.setSpacing(10);
-		// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
-		ToggleGroup togglePlayerGroup = new ToggleGroup();
 		// RadioButton fuer Spieler O erstellen
 		RadioButton playerO = new RadioButton("Spieler O");
 		playerO.setToggleGroup(togglePlayerGroup);
 		playerO.setSelected(true);
+		playerO.setUserData(0);
 		playerO.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerO);
 		// RadioButton fuer Spieler X erstellen
 		RadioButton playerX = new RadioButton("Spieler X");
 		playerX.setToggleGroup(togglePlayerGroup);
+		playerX.setUserData(1);
 		playerX.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerX);
 		// Eingabefeld fuer Verzeichnisangabe erstellen
@@ -86,23 +99,23 @@ public class MainGui {
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				setMove(0, 5, 5);
+				int player = getSelectedPlayer();
+				setMove(player, 5, 5);
+				score.setHomeScore(score.getHomeScore() + 1);
 			}
 		});
 		controlGroup.getChildren().add(startButton);
 		// Beenden Button erstellen
-		Button exitButton = new Button("Exit");
+		Button exitButton = new Button("Beenden");
 		exitButton.setPrefSize(200, 50);
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				System.out.println("Exit");
+				System.out.println("Beenden");
 				System.exit(0);
 			}
 		});
 		controlGroup.getChildren().add(exitButton);
-		
-		
 		
 		
 		// Steuergruppe dem "Center" Bereich zuweisen
@@ -116,7 +129,14 @@ public class MainGui {
 		mainStage.show();
 	}
 	
-	public static void setMove(int player, int column, int row) {
+	/**
+	 * Zeichnet einen Spielerstein an die uebergebene Position (Koordinate)
+	 * 
+	 * @param player Integer
+	 * @param column Integer
+	 * @param row Integer
+	 */
+	public void setMove(int player, int column, int row) {
 		Image[] playerImages = new Image[2];
 		playerImages[0] = PLAYERO_IMG;
 		playerImages[1] = PLAYERX_IMG;
@@ -124,5 +144,9 @@ public class MainGui {
 		ImageView playerXview = new ImageView(playerImages[player]);
 		playerXview.relocate(PLAYER_XOFFSET + HOLE_SPACING * column, PLAYER_YOFFSET + HOLE_SPACING * row);
 		gamefield.getChildren().add(playerXview);
+	}
+	
+	public int getSelectedPlayer() {
+		return (Integer) togglePlayerGroup.getSelectedToggle().getUserData();
 	}
 }

@@ -1,16 +1,24 @@
 package controller;
 
+import gui.MainGui;
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 import logic.KI;
 
-public class Main {
-	public int turn;
+public class Main extends Application {
 	private static int tmpColumn;
-
-	/**
-	 * @param args
-	 */
+	
 	public static void main (String[] args) {
-		KI ki = new KI();
+		launch(args);
+	}
+	
+	@Override
+	public void start(Stage mainStage) throws InterruptedException {
+		MainGui gui = new MainGui();
+		gui.initialize(mainStage);
+		
+		KI ki = new KI(gui);
 		ki.createField();
 		// Variablen geben Spalte und Spieler an
 		ki.setRow(4, 1);

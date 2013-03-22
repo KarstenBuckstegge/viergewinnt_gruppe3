@@ -1,5 +1,6 @@
 package logic;
 
+import gui.MainGui;
 import java.util.Random;
 
 public class KI {
@@ -11,6 +12,7 @@ public class KI {
 		 * @param args
 		 */
 	private int [][] field;
+	private MainGui gui = null;
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
@@ -31,6 +33,10 @@ public class KI {
 		return field;
 	}
 	
+	public KI(MainGui gui) {
+		this.gui = gui;
+	}
+	
 	public int setRow(int column, int player){
 		
 		int returnRow = -1;
@@ -48,7 +54,9 @@ public class KI {
 				field[column] [rowCounter] = player;
 				System.out.println("Stone droped in row " + returnRow + " and column " + column);
 				System.out.println("New Value=" + field [column][returnRow]);
-
+				
+				gui.setMove(player, column, returnRow);
+				
 				break; // beende for-schleife
 			}
 		}

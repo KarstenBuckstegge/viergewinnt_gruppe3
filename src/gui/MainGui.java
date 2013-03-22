@@ -137,9 +137,9 @@ public class MainGui {
 	 * @param row Integer
 	 */
 	public void setMove(int player, int column, int row) {
-		Image[] playerImages = new Image[2];
-		playerImages[0] = PLAYERO_IMG;
-		playerImages[1] = PLAYERX_IMG;
+		Image[] playerImages = new Image[3];
+		playerImages[1] = PLAYERO_IMG;
+		playerImages[2] = PLAYERX_IMG;
 		
 		ImageView playerXview = new ImageView(playerImages[player]);
 		playerXview.relocate(PLAYER_XOFFSET + HOLE_SPACING * column, PLAYER_YOFFSET + HOLE_SPACING * row);

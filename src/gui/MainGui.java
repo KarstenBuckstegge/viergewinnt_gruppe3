@@ -1,5 +1,8 @@
 package gui;
 
+//import connect.Connect;
+
+import java.io.File;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -20,6 +24,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.stage.DirectoryChooser;
 
 public class MainGui {
 	private final int COLUMNS = 7;
@@ -31,12 +38,20 @@ public class MainGui {
 	private final Image PLAYERO_IMG = new Image("/images/playerO.png", true);
 	private final Image PLAYERX_IMG = new Image("/images/playerX.png", true);
 	
+	private int homePlayer = 0;
+	
+	private Connect connect = new Connect();
+	
 	private Pane gamefield = new Pane();
 	
 	private Color bgColor = Color.rgb(31, 31, 31);
 	
 	// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
 	final ToggleGroup togglePlayerGroup = new ToggleGroup();
+	
+	public MainGui(Connect connect) {
+		this.connect = connect;
+	}
 	
 	/**
 	 * Baut das Hauptfenster mit Spielfeld und Steuerelementen auf
@@ -78,29 +93,48 @@ public class MainGui {
 		RadioButton playerO = new RadioButton("Spieler O");
 		playerO.setToggleGroup(togglePlayerGroup);
 		playerO.setSelected(true);
-		playerO.setUserData(0);
+		playerO.setUserData(1);
 		playerO.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerO);
 		// RadioButton fuer Spieler X erstellen
 		RadioButton playerX = new RadioButton("Spieler X");
 		playerX.setToggleGroup(togglePlayerGroup);
-		playerX.setUserData(1);
+		playerX.setUserData(2);
 		playerX.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerX);
+		// Eventlistener fuer Spielerauswahl erstellen
+		togglePlayerGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				if (togglePlayerGroup.getSelectedToggle() != null) {
+					setSelectedPlayer();
+				}
+			}
+		});
+		/*
 		// Eingabefeld fuer Verzeichnisangabe erstellen
 		TextField directoryInput = new TextField();
 		userInputVBox.getChildren().add(directoryInput);
-		
+		*/
 		controlGroup.getChildren().add(userInputVBox);
 		
+		// Verzeichnisauswahl Button erstellen
+		Button chooseFolderButton = new Button("Verzeichnis waehlen");
+		chooseFolderButton.setPrefSize(200, 50);
+		chooseFolderButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				chooseTransferDirectory();
+			}
+		});
+		controlGroup.getChildren().add(chooseFolderButton);
 		// Start Button erstellen
 		Button startButton = new Button("Start");
 		startButton.setPrefSize(200, 50);
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				int player = getSelectedPlayer();
-				setMove(player, 5, 5);
+				connect.startGame();
+				setMove(homePlayer, 5, 5);
 				score.setHomeScore(score.getHomeScore() + 1);
 			}
 		});
@@ -146,7 +180,25 @@ public class MainGui {
 		gamefield.getChildren().add(playerXview);
 	}
 	
-	public int getSelectedPlayer() {
-		return (Integer) togglePlayerGroup.getSelectedToggle().getUserData();
+	/**
+	 * Setzt den ausgewaehlten Spieler und uebergibt ihn dem Connect
+	 */
+	private void setSelectedPlayer() {
+		this.homePlayer = (Integer) togglePlayerGroup.getSelectedToggle().getUserData();
+		connect.setPlayerID(this.homePlayer);
+	}
+	
+	/**
+	 * Transfverzeichnis auswaehlen 
+	 */
+	private void chooseTransferDirectory() {
+		File transferDirectory = null;
+		
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		
+		//Show open file dialog
+		transferDirectory = directoryChooser.showDialog(null);
+		
+		connect.setTransferDirectory(transferDirectory.getPath());
 	}
 }

@@ -18,9 +18,10 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage mainStage) throws InterruptedException, IOException {
+		Connect connect = new Connect();
 		MainGui gui = new MainGui();
 		gui.initialize(mainStage);
-		Connect connect = new Connect();
+		
 		
 		KI ki = new KI(gui, connect);
 		ki.createField();

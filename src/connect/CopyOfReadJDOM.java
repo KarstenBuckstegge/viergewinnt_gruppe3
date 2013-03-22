@@ -10,14 +10,14 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 
-public class ReadJDOM {
+public class CopyOfReadJDOM {
 
 	/**
 	 * Klasse ReadJDOM liest XML-Files und liefert die Werte geparst an Connect!
 	 */
 	int enemyMove;
 	
-	public ReadJDOM() {
+	public CopyOfReadJDOM() {
 		
 
 		Document doc = null; 

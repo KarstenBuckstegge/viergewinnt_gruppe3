@@ -11,6 +11,7 @@ public class Connect {
 	 * @param args
 	 */
 
+	
 	// 1. Parameter holen
 	// - Von GUI-Dropdown ermitteln ob man spielero oder spielerx ist.
 	// - Laufwerk aus GUI-Browsing-Dialog ziehen.	

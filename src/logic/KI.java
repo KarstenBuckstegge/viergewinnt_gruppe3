@@ -1,6 +1,9 @@
 package logic;
 
 import gui.MainGui;
+import connect.Connect;
+
+import java.io.IOException;
 import java.util.Random;
 
 public class KI {
@@ -13,6 +16,7 @@ public class KI {
 		 */
 	private int [][] field;
 	private MainGui gui = null;
+	private Connect connect = null;
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
@@ -33,11 +37,12 @@ public class KI {
 		return field;
 	}
 	
-	public KI(MainGui gui) {
+	public KI(MainGui gui, Connect connect) {
 		this.gui = gui;
+		this.connect = connect;
 	}
 	
-	public int setRow(int column, int player){
+	public int setRow(int column, int player) throws IOException{
 		
 		int returnRow = -1;
 		int currentValue = -1;
@@ -54,7 +59,6 @@ public class KI {
 				field[column] [rowCounter] = player;
 				System.out.println("Stone droped in row " + returnRow + " and column " + column);
 				System.out.println("New Value=" + field [column][returnRow]);
-				
 				gui.setMove(player, column, returnRow);
 				
 				break; // beende for-schleife
@@ -69,14 +73,15 @@ public class KI {
 		return returnRow;
 	}
 	
-	public int calculateNextMove(int playerID)
+	public int calculateNextMove(int playerID) throws IOException
 	{
 		int newValue = -1;
 		//int tmp = 0;
 		Random generator = new Random();
 		newValue = generator.nextInt(6);
 		//newValue = ctrlclass.COLUMNS - tmp - 1;
+		Connect.setStone(newValue);
 		return newValue;
 	}
-	
+
 }

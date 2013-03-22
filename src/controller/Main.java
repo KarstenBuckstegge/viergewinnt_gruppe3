@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.IOException;
+
 import gui.MainGui;
+import connect.Connect;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,11 +17,12 @@ public class Main extends Application {
 	}
 	
 	@Override
-	public void start(Stage mainStage) throws InterruptedException {
+	public void start(Stage mainStage) throws InterruptedException, IOException {
 		MainGui gui = new MainGui();
 		gui.initialize(mainStage);
+		Connect connect = new Connect();
 		
-		KI ki = new KI(gui);
+		KI ki = new KI(gui, connect);
 		ki.createField();
 		// Variablen geben Spalte und Spieler an
 		ki.setRow(4, 1);

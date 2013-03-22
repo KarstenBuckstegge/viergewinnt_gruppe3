@@ -6,7 +6,7 @@ public class Connect {
 
   /**
    * Klasse Connect stellt die Schnittstelle zwischen Server und Agent dar.
-   * Hauptprogramm fŸr alle KommunikationsablŠufe
+   * Hauptprogramm fï¿½r alle Kommunikationsablï¿½ufe
    * 
 	 * @param args
 	 */
@@ -19,7 +19,7 @@ public class Connect {
 	
 	ReadJDOM read = new ReadJDOM();
 	
-	System.out.println(read.getEnemyMove());
+	//System.out.println(read.getEnemyMove());
 	
 
 	// 3. Funktion: Agentfile auf Kontaktpfad schreiben.
@@ -28,7 +28,7 @@ public class Connect {
 	
 	
 	int opMove = 4; // Simuliert Info aus Server-Datei
-	static int move = 3; // Stellvertretend fÃ¼r letzten Zug
+	static int move = 3; // Stellvertretend fï¿½ï¿½r letzten Zug
 	public static void main(String[] args)
 	
 	{

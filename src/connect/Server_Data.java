@@ -2,7 +2,6 @@ package connect;
 
 import java.io.File;
 import java.io.IOException;
-// import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -10,31 +9,32 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 
-public class ReadJDOM {
+public class Server_Data {
 
 	/**
-	 * Klasse ReadJDOM liest XML-Files und liefert die Werte geparst an Connect!
+	 * @param args
 	 */
+	
 	int enemyMove;
 	
-	public ReadJDOM() {
-		
+	public boolean readFile(String fileName)
 
-		Document doc = null; 
+	{
 		
-		
+		Document doc = null;
+				
         // spielero / spielerx Information aus Datenbank ziehen.
-        File f = new File("server2spielero.xml"); 
-
+		
+        File f = new File(fileName+"");
+            
         try { 
         	
             // Das Dokument erstellen 
             SAXBuilder builder = new SAXBuilder(); 
-            doc = builder.build(f); 
-            XMLOutputter tmp = new XMLOutputter(); 
+            doc = builder.build(f);
             
-            Element element = doc.getRootElement();
-            
+            XMLOutputter fmt = new XMLOutputter();            
+            Element element = doc.getRootElement();            
                   
             // Freigabe lesen
             Element freigabe = element.getChild("freigabe"); 
@@ -47,43 +47,37 @@ public class ReadJDOM {
             // Gegnerzug lesen
             Element gegnerzug = element.getChild("gegnerzug"); 
             System.out.println("Gegnerzug: " + gegnerzug.getValue());
-            String enemymove = gegnerzug.getValue();
-            
-            System.out.println(enemymove);
                
             enemyMove = Integer.parseInt(gegnerzug.getValue());
             System.out.println("Ergebnis ist : "+enemyMove);
                 
-            
             // Sieger lesen
             Element sieger = element.getChild("gegnerzug"); 
-            System.out.println("Sieger: " + sieger.getValue());
-            
-            
-     
+            System.out.println("Sieger: " + sieger.getValue());       
+            	
+   
           
         } catch (JDOMException e) { 
             e.printStackTrace(); 
         } catch (IOException e) { 
             e.printStackTrace(); 
-        } 
-        
-
+        }
 		
-		
+        return true;
 		
 	}
-	
-	
-	
-	public static void main(String[] args) {
 
-		
-        
-	}
+	
+	public int getEnemyMove()
 
-	public int getEnemyMove() {
-		
+	{
 		return enemyMove;
 	}
+	
+	public void setEnemyMove()
+	{
+		
+	}
+	
+	
 }

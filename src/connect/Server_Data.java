@@ -1,6 +1,8 @@
 package connect;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.jdom2.Document;
@@ -11,11 +13,20 @@ import org.jdom2.output.XMLOutputter;
 
 public class Server_Data {
 
-	/**
+	/*
+	 * @author Christian Samide
 	 * @param args
 	 */
 	
 	int enemyMove;
+	
+	Server_Connector connect2 = null;
+	
+	public Server_Data(Server_Connector uebergabe) {
+		
+		connect2 = uebergabe;
+	
+	}
 	
 	public boolean readFile(String fileName)
 
@@ -74,9 +85,14 @@ public class Server_Data {
 		return enemyMove;
 	}
 	
-	public void setEnemyMove()
+	public void setStone(int column) throws IOException
 	{
-		
+		int move = column;
+		FileWriter fw = new FileWriter(connect2.getFileName2Server());
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    
+	    bw.write(String.valueOf(move));
+	    bw.close();
 	}
 	
 	

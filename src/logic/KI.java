@@ -3,8 +3,14 @@ package logic;
 import java.util.Random;
 
 public class KI {
+	 /**
+	   * KI stellt ein Spielfeld her. 
+	   * Kann erkennen welcher Stein an welcher Stelle liegt, das Feld auslesen, 
+	   * einen Stein in eine Spalte werfen und einen neuen Zug generieren.
+	   * 
+		 * @param args
+		 */
 	private int [][] field;
-	private  int [][] previousField;
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
@@ -25,11 +31,7 @@ public class KI {
 		return field;
 	}
 	
-	
-	// TODO: Check it!!!
-	public int setStone(int column, int player){
-		
-		previousField = field;
+	public int setRow(int column, int player){
 		
 		int returnRow = -1;
 		int currentValue = -1;
@@ -46,7 +48,6 @@ public class KI {
 				field[column] [rowCounter] = player;
 				System.out.println("Stone droped in row " + returnRow + " and column " + column);
 				System.out.println("New Value=" + field [column][returnRow]);
-				System.out.println("Old Value=" + previousField [column][returnRow]);
 
 				break; // beende for-schleife
 			}

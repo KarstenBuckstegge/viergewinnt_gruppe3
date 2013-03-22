@@ -13,10 +13,10 @@ public class Main {
 		KI ki = new KI();
 		ki.createField();
 		// Variablen geben Spalte und Spieler an
-		ki.setStone(4, 1);
+		ki.setRow(4, 1);
 		tmpColumn = ki.calculateNextMove(1);
 		System.out.println(tmpColumn);
-		ki.setStone(tmpColumn, 2);
+		ki.setRow(tmpColumn, 2);
 	}
 
 }

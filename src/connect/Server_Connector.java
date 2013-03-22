@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * @author Chris
+ * @author Christian Samide
  *
  */
 public class Server_Connector {
@@ -61,6 +61,7 @@ public class Server_Connector {
 			// ToDo: check if the given directory is available
 			// if not return false
 			this.transferDirectory = directory;
+			System.out.println(this.transferDirectory);
 			return isAvailable;
 		} // setTransferDirectory
 		

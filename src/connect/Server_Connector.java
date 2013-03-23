@@ -75,7 +75,10 @@ public class Server_Connector {
 			return this.transferDirectory;
 		} // get Transferdirectory
 		
-
+	public String getFileName2Server() {
+		
+		return fileName2Server;
+	}
 		/**
 		 * Startet das Spiel, suchen nach Dateien vom Server
 		 * @throws IOException 

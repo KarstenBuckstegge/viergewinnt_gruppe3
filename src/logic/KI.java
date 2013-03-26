@@ -26,18 +26,6 @@ public class KI {
 		System.out.println("FIELD CREATED");
 	}
 	
-	public int getPlayer(int column, int row) { // player: 0 = leer, 1 = x, 2 = o 
-		/**
-		 * 
-		 * getPlayer gibt aus welcher Stein an der angefragten Stelle liegt
-		 */
-		
-		System.out.println("column: " + column + " row: " + row);
-		int test = this.field[column][row];
-		System.out.println(test);
-		return this.field[column][row];
-	}
-	
 	// Das komplette Feld inclusive Steine ausgeben
 	public int [][] getField() {
 		return field;
@@ -97,5 +85,4 @@ public class KI {
 		Connect.setStone(newValue);
 		return newValue;
 	}
-
 }

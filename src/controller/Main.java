@@ -19,7 +19,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage mainStage) throws InterruptedException, IOException {
 		Connect connect = new Connect();
-		MainGui gui = new MainGui();
+		MainGui gui = new MainGui(null);
 		gui.initialize(mainStage);
 		
 		

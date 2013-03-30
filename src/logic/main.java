@@ -8,8 +8,10 @@ public class main {
 	 */
 	public static void main(String[] args) {
 		TestKI.createField();
-		TestKI.checkLines(2, 3, true);
-		TestKI.checkLines(2, 3, false);
+		TestKI.checkLines(2, 5, 1);
+		TestKI.checkLines(2, 5, 2);
+		TestKI.checkLines(2, 5, 3);
+		TestKI.checkLines(4, 5, 4);
 	}
 
 }

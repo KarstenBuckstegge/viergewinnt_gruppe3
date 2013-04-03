@@ -14,11 +14,13 @@ public class Server_Connector {
 	 * 
 	 */
 	
+	private int playerID = 0;
 	private String  [] fileNameSuffix = {"unknown","x", "0"};
 	private String fileName2Server = "";
 	private String fileNameFromServer = "";
 	private String transferDirectory = ".\\Transfer";
 	private int movetime = 2000;
+	
 	
 	
 	/**
@@ -28,7 +30,7 @@ public class Server_Connector {
 	 */
 	public void setPlayerID(int playerID)
 	{
-		
+		this.playerID = playerID;
 		String tmp = fileNameSuffix[playerID];
 		fileNameFromServer = "server2spieler" + tmp + ".xml";
 		fileName2Server = "spieler" + tmp + "2server.txt";
@@ -101,6 +103,12 @@ public class Server_Connector {
 		 *  
 		 * @param directory
 		 */
+	
+	public int getPlayerID() {
+		
+		return playerID;
+		
+	}
 
 	public String getTransferDirectory()
 		{

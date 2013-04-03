@@ -17,7 +17,6 @@ public class testing {
 //		
 		String directory = "/Users/Chris/Desktop/";
 		connect.setTransferDirectory(directory);
-		
 		connect.startGame();
 		
 		

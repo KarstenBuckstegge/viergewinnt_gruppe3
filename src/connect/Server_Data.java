@@ -107,7 +107,7 @@ public class Server_Data {
 			else {
 			
 					ok=false;
-					Thread.sleep(300);
+					Thread.sleep(6000);
 					System.out.println("300 ms warten...");
 			}//else
 		

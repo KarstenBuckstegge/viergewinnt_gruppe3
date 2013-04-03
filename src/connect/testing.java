@@ -15,10 +15,13 @@ public class testing {
 		Server_Connector connect = new Server_Connector();
 		connect.setPlayerID(1);
 //		
-//		String directory = "/Users/Chris/Desktop";
-//		connect.setTransferDirectory(directory);
+		String directory = "/Users/Chris/Desktop/";
+		connect.setTransferDirectory(directory);
 		
 		connect.startGame();
+		
+		
+	
 
 	}
 

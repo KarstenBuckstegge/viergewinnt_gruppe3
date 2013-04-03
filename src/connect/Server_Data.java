@@ -59,11 +59,13 @@ public class Server_Data {
 		do{
 		
 			Document doc = null;
-			File f = new File(fileNameFromServer+"");
-		
+			File f = new File(transferDirectory+fileNameFromServer+"");
+			System.out.println("Prüfe ob File da ist...");
+
 				if (f.exists())
 			{
-					
+				System.out.println("File ist da. Beginne lesen...");
+
 					try { 
 			        	
 			            // Das Dokument erstellen 
@@ -105,14 +107,14 @@ public class Server_Data {
 			else {
 			
 					ok=false;
-					//wait(300);
-			
+					Thread.sleep(300);
+					System.out.println("300 ms warten...");
 			}//else
 		
 		}while (ok==false);
 		
-		KI give = new KI();
-		give.setRow(column, player)
+	/*	KI give = new KI();
+		give.setRow(column, player)*/
 		
 	}// do
 		
@@ -126,15 +128,16 @@ public class Server_Data {
 		return enemyMove;
 	}
 	
-	public void setStone(int column) throws IOException
+	public void setStoneWriteFile(int column) throws IOException, InterruptedException
 	{
 		System.out.println("WriteFile aufgerufen!");
 		System.out.println(fileName2Server);
 		int move = column;
-		FileWriter fw = new FileWriter(fileName2Server);
+		FileWriter fw = new FileWriter(transferDirectory+fileName2Server);
 	    BufferedWriter bw = new BufferedWriter(fw);	    
 	    bw.write(String.valueOf(move));
-	    bw.close();	   
+	    bw.close();
+	    readFile();
 	}
 	
 	

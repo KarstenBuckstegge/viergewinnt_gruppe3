@@ -11,7 +11,7 @@ public class WriteFile {
 	
 	{
 			System.out.println("WriteFile aufgerufen!");
-		 	FileWriter fw = new FileWriter("spielero2server.txt");
+		 	FileWriter fw = new FileWriter();
 		    BufferedWriter bw = new BufferedWriter(fw);
 		    
 		    bw.write(String.valueOf(Connect.move));

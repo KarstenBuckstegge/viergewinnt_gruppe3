@@ -11,66 +11,98 @@ public class Server_Connector {
 
 	/**
 	 * @param args
+	 * 
 	 */
 	
 	private String  [] fileNameSuffix = {"unknown","x", "0"};
 	private String fileName2Server = "";
 	private String fileNameFromServer = "";
 	private String transferDirectory = ".\\Transfer";
-	
-	public static final String NEWLINE = System.getProperty("line.separator");
-
-//	private Server_Data lastServerFile = new Server_Data();
+	private int movetime = 2000;
 	
 	
+	/**
+	 * GUI setzt mit dieser Methode den Spieler (playerID).
+	 * Generiert die Datei-Namen zum Lesen und Schreiben der Spielzüge.
+	 * 
+	 */
 	public void setPlayerID(int playerID)
 	{
+		
 		String tmp = fileNameSuffix[playerID];
 		fileNameFromServer = "server2spieler" + tmp + ".xml";
 		fileName2Server = "spieler" + tmp + "2server.txt";
-		StringBuilder output = new StringBuilder();
 		
-		System.out.println("Dateiname fuer Info an den Server=" + fileName2Server);
-		output.append(NEWLINE);
-		System.out.println("Dateiname fuer Info vom Server=" + fileNameFromServer);
+		// Kontroll-Ausgabe in der Konsole
+		System.out.println("fileNameSuffix: "+tmp);
+		System.out.println("fileNameFromServer: "+fileNameFromServer);
+		System.out.println("fileName2Server: "+fileName2Server);
 		
-		File fi = new File(fileNameFromServer);
 		
-		String absPath = fi.getAbsolutePath();
-		System.out.println("FilePath="+absPath);
-		
-		try {
-			fi.createNewFile();
-		}
-		catch (IOException e) {
-			
-			e.printStackTrace();	
-		}
-		
-				
-		/**
-		 * Setzt das Verzeichnis fuer den Datenaustausch mit dem Server
-		 * 
-		 * @param directory
-		 */
 	} // set PlayerID
 
-	public boolean setTransferDirectory(String directory)
-		{
-			boolean isAvailable = true;
-			// ToDo: check if the given directory is available
-			// if not return false
-			this.transferDirectory = directory;
-			System.out.println(this.transferDirectory);
-			return isAvailable;
-		} // setTransferDirectory
+	
+	// Setzt das Verzeichnis, in dem die Datei gelesen werden soll.
+	public void setTransferDirectory(String directory)
+	{
+		
+		this.transferDirectory = directory;
+		
+		// Kontroll-Ausgabe in der Konsole
+		System.out.println("transferDirectory: "+this.transferDirectory);
+		
+	} // setTransferDirectory
+	
+	
+	// Setzt die Zugzeit
+	public void setMoveTime(int movetime)
+	{
+		this.movetime = movetime;
+		System.out.println("movetime: "+this.movetime+" ms");
+
+	} //setMoveTime
+	
+	
+	
+	// Startet den ersten Lese-Vorgang
+	public void startGame() throws InterruptedException
+	{
+		System.out.println("startGame() aufgerufen!");
+		Server_Data objekt = new Server_Data(fileNameFromServer, fileName2Server, transferDirectory);
+//		objekt.readFile();
+		
+	}
+		
+		
+		
+//		StringBuilder output = new StringBuilder();
+//		
+//		System.out.println("Dateiname fuer Info an den Server=" + fileName2Server);
+//		output.append(NEWLINE);
+//		System.out.println("Dateiname fuer Info vom Server=" + fileNameFromServer);
+		
+//		File fi = new File(fileNameFromServer);
+		
+//		String absPath = fi.getAbsolutePath();
+//		System.out.println("FilePath="+absPath);
+		
+//		try {
+//			fi.createNewFile();
+//		}
+//		catch (IOException e) {
+//			
+//			e.printStackTrace();	
+//		}
+		
+
+
 		
 		/**
 		 *  
 		 * @param directory
 		 */
 
-	public String getTransferDirectoy()
+	public String getTransferDirectory()
 		{
 			return this.transferDirectory;
 		} // get Transferdirectory
@@ -79,17 +111,18 @@ public class Server_Connector {
 		
 		return fileName2Server;
 	}
+public String getFileNameFromServer() {
+		
+		return fileNameFromServer;
+	}
+	
 		/**
 		 * Startet das Spiel, suchen nach Dateien vom Server
 		 * @throws IOException 
 		 * @throws FileNotFoundException 
 		 * 
 		 */
-	public void startGame() 
-		{
-			
-		}
-		
+
 		
 		
 		
@@ -151,10 +184,5 @@ public class Server_Connector {
 */		
 		
 	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

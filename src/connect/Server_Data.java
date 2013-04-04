@@ -1,4 +1,5 @@
 package connect;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,20 +13,38 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 
+/**
+ * <pre>
+ * Klasse Server_Data:
+ * 
+ * - Liest Server-File * 
+ * 
+ * - Gibt Gegnerzug an Logik weiter
+ * 
+ * - Schreibt Agent-File
+ * </pre>
+ * 
+ * @author Christian Samide
+ * @param args
+ */
 public class Server_Data {
 
-	/*
-	 * @author Christian Samide
-	 * @param args
-	 * http://www.rgagnon.com/javadetails/java-0490.html
-	 */
-	
+	/**
+	 * Initialisierungen der Attribute
+	 */	
 	int enemyMove;
 	int playerID;
 	String fileNameFromServer;
 	String fileName2Server;
 	String transferDirectory;
 	
+	/**
+	 *	Konstruktor Server_Data() mit Parameterliste
+	 *
+	 *	- Ermöglicht Server_Connector die Übergabe der Parameter, die für Lesen und Schreiben der Server- bzw. Agentfiles notwendig sind.
+	 *
+	 *  - readFile() löst Lese-Vorgang bei Objekterzeugung aus.
+	 */
 	public Server_Data(int playerID, String fileNameFromServer, String fileName2Server, String transferDirectory) throws InterruptedException, IOException
 	{
 		this.playerID = playerID;
@@ -37,20 +56,31 @@ public class Server_Data {
 		
 	}
 	
+	/**
+	 * Alternativer Konstruktor Server_Data() ohne Parameterliste
+	 */
 	public Server_Data(){}
-
 	
-		public void readFile() throws InterruptedException, IOException
+	/**
+	 * Methode readFile() steuert alle Abläufe zum Lesen des Server-Files
+	 */
+	public void readFile() throws InterruptedException, IOException
 	{
 		
-		// Bedingung fuer do-Schleife
-		boolean ok = false;
+		/**
+		 * Initialisierung der Variable read_success.
+		 */
+		boolean read_success = false;	
 		
-		
+		/**
+		 * Schleife steuert Lese-Vorgang
+		 * solange read_success = false
+		 * Abbruchbedingung: read_success = true
+		 */
 		do{
 		
 			Document doc = null;
-			File f = new File(transferDirectory+fileNameFromServer+"");
+			File f = new File(transferDirectory+"/"+fileNameFromServer+"");
 			System.out.println("Prüfe ob File da ist...");
 
 				if (f.exists())
@@ -80,7 +110,8 @@ public class Server_Data {
 			               
 			            enemyMove = Integer.parseInt(gegnerzug.getValue());
 			            System.out.println("Ergebnis ist : "+enemyMove);
-			            ok=true;
+			            read_success=true;
+			            f.delete();
 			                
 			            // Sieger lesen
 			            Element sieger = element.getChild("gegnerzug"); 
@@ -97,27 +128,24 @@ public class Server_Data {
 			}//if
 			else {
 			
-					ok=false;
+					read_success=false;
 					Thread.sleep(6000);
 					System.out.println("300 ms warten...");
 			}//else
 		
-		}while (ok==false);
+		}while (read_success==false);
 		
 		KI give = new KI();
 		give.createField();
+		
 		give.setEnemyMove(enemyMove, playerID);
 		
-	}// do
 		
-
+	}// do
 	
-	public int getEnemyMove()
-
-	{
-		return enemyMove;
-	}
-	
+	/**
+	 * Übernimmt die von logic berechnete Spalte (den Spielzug) und schreibt das Agentfile.
+	 */
 	public void setStoneWriteFile(int column) throws IOException, InterruptedException
 	{
 		System.out.println("WriteFile aufgerufen!");

@@ -44,7 +44,7 @@ public class KI {
 	public KI() {
 	}
 	
-//------------------------------ Berechnung der Zeile ------------------------------------
+//------------------------------ Berechnung der Zeile -------------------------------------
 
 	public void setEnemyMove(int column, int player) throws IOException {
 		setRow(column, player);

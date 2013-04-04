@@ -3,6 +3,10 @@ package controller;
 import java.io.IOException;
 
 import gui.MainGui;
+<<<<<<< HEAD
+=======
+import connect.Server_Connector;
+>>>>>>> - Datenbank hinzugefuegt
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -16,7 +20,12 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage mainStage) throws InterruptedException, IOException {
+<<<<<<< HEAD
 		MainGui gui = new MainGui(null);
+=======
+		Server_Connector connect = new Server_Connector();
+		MainGui gui = new MainGui(connect);
+>>>>>>> - Datenbank hinzugefuegt
 		gui.initialize(mainStage);
 		
 		

@@ -1,5 +1,7 @@
 package gui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -9,12 +11,6 @@ import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.Stop;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.effect.DropShadow;
 
 
@@ -66,6 +62,9 @@ public class ScoreBoard {
 		scoreGroup.getChildren().add(separator);
 		scoreGroup.getChildren().add(guestScoreText);
 		
+		// Score Board zentrieren und dem Container hinzufuegen
+		scoreGroup.setAlignment(Pos.CENTER);
+		BorderPane.setMargin(scoreGroup, new Insets(20, 0, 0, 0));
 		container.setTop(scoreGroup);
 	}
 	

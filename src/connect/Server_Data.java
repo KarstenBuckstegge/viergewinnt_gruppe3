@@ -70,7 +70,6 @@ public class Server_Data {
 	 */
 	public int readFile() throws InterruptedException, IOException
 	{
-		
 		/**
 		 * Initialisierung der Variable read_success.
 		 */
@@ -82,58 +81,56 @@ public class Server_Data {
 		 * Abbruchbedingung: read_success = true
 		 */
 		do{
-		
 			Document doc = null;
 			File f = new File(transferDirectory+"/"+fileNameFromServer+"");
 			System.out.println("Prüfe ob File da ist...");
 
-				if (f.exists())
+			if (f.exists())
 			{
 				System.out.println("File ist da. Beginne lesen...");
-
 					try { 
-			        	
-			            // Das Dokument erstellen 
-			            SAXBuilder builder = new SAXBuilder(); 
-			            doc = builder.build(f);
-			            
-			            XMLOutputter fmt = new XMLOutputter();            
-			            Element element = doc.getRootElement();            
-			                  
-			            // Freigabe lesen
-			            Element freigabe = element.getChild("freigabe"); 
-			            System.out.println("Freigabe: " + freigabe.getValue());
-			            
-			            // Satzstatus lesen
-			            Element satzstatus = element.getChild("satzstatus"); 
-			            System.out.println("Satzstatus: " + satzstatus.getValue());
-			            
-			            // Gegnerzug lesen
-			            Element gegnerzug = element.getChild("gegnerzug"); 
-			            System.out.println("Gegnerzug: " + gegnerzug.getValue());
-			               
-			            enemyMove = Integer.parseInt(gegnerzug.getValue());
-			            System.out.println("Ergebnis ist : "+enemyMove);
-			            read_success=true;
-			            f.delete();
-			                
-			            // Sieger lesen
-			            Element sieger = element.getChild("gegnerzug"); 
-			            System.out.println("Sieger: " + sieger.getValue());       
-			            	
-			   
-			          
-			        } catch (JDOMException e) { 
-			            e.printStackTrace(); 
-			        } catch (IOException e) { 
-			            e.printStackTrace(); 
-			        }
+						
+						// Das Dokument erstellen 
+						SAXBuilder builder = new SAXBuilder(); 
+						doc = builder.build(f);
+						
+						XMLOutputter fmt = new XMLOutputter();            
+						Element element = doc.getRootElement();            
+						
+						// Freigabe lesen
+						Element freigabe = element.getChild("freigabe"); 
+						System.out.println("Freigabe: " + freigabe.getValue());
+						
+						// Satzstatus lesen
+						Element satzstatus = element.getChild("satzstatus"); 
+						System.out.println("Satzstatus: " + satzstatus.getValue());
+						
+						// Gegnerzug lesen
+						Element gegnerzug = element.getChild("gegnerzug"); 
+						System.out.println("Gegnerzug: " + gegnerzug.getValue());
+						
+						enemyMove = Integer.parseInt(gegnerzug.getValue());
+						System.out.println("Ergebnis ist : "+enemyMove);
+						read_success=true;
+						f.delete();
+						
+						// Sieger lesen
+						Element sieger = element.getChild("gegnerzug"); 
+						System.out.println("Sieger: " + sieger.getValue());       
+						
+						
+						
+					} catch (JDOMException e) { 
+						e.printStackTrace(); 
+					} catch (IOException e) { 
+						e.printStackTrace(); 
+					}
 					
 			}//if
 			else {
-			
 					read_success=false;
 					Thread.sleep(6000);
+					Thread.yield();
 					System.out.println("300 ms warten...");
 			}//else
 		
@@ -157,13 +154,9 @@ public class Server_Data {
 		System.out.println(fileName2Server);
 		int move = column;
 		FileWriter fw = new FileWriter(transferDirectory+"/"+fileName2Server);
-	    BufferedWriter bw = new BufferedWriter(fw);	    
-	    bw.write(String.valueOf(move));
-	    bw.close();
-	    // readFile();
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(String.valueOf(move));
+		bw.close();
+		// readFile();
 	}
-
-	
-	
-	
 }

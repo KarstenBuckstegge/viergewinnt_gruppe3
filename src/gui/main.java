@@ -2,7 +2,7 @@ package gui;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-//import connect.Connect;
+import connect.Server_Connector;
 
 public class main extends Application {
 	public static void main(String[] args) {
@@ -11,8 +11,9 @@ public class main extends Application {
 	
 	@Override
 	public void start(Stage mainStage) throws InterruptedException {
-		Connect connect = new Connect();
+		Server_Connector connect = new Server_Connector();
 		MainGui gui = new MainGui(connect);
+		
 		gui.initialize(mainStage);
 		
 		gui.setMove(1, 3, 5);

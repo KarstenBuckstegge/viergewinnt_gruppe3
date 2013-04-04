@@ -1,7 +1,11 @@
 package logic;
 
 import gui.MainGui;
+<<<<<<< HEAD
 import connect.Server_Data;
+=======
+import connect.Server_Connector;
+>>>>>>> Gui erweitert
 
 import java.io.IOException;
 import java.util.Random;
@@ -22,7 +26,11 @@ public class KI {
 	private int homePlayer = 0;
 	private boolean firstMove = true;
 	private MainGui gui = null;
+<<<<<<< HEAD
 	private Server_Data connect = null;
+=======
+	private Server_Connector connect = null;
+>>>>>>> Gui erweitert
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
@@ -40,7 +48,11 @@ public class KI {
 	}
 	
 	// Constructor
+<<<<<<< HEAD
 	public KI(MainGui gui,Server_Data connect) {
+=======
+	public KI(MainGui gui, Server_Connector connect) {
+>>>>>>> Gui erweitert
 		this.gui = gui;
 		this.connect = connect;
 	}

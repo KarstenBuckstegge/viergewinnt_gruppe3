@@ -1,8 +1,11 @@
 package gui;
 
-//import connect.Connect;
+import connect.Server_Connector;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import database.Agent;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,16 +43,18 @@ public class MainGui {
 	
 	private int homePlayer = 0;
 	
-	private Connect connect = new Connect();
+	private Server_Connector connect = new Server_Connector();
 	
 	private Pane gamefield = new Pane();
 	
-	private Color bgColor = Color.rgb(31, 31, 31);
+	private Color bgColor = Color.rgb(25, 25, 25);
+	
+	private ArrayList<ImageView> playerItems = new ArrayList<ImageView>();
 	
 	// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
 	final ToggleGroup togglePlayerGroup = new ToggleGroup();
 	
-	public MainGui(Connect connect) {
+	public MainGui(Server_Connector connect) {
 		this.connect = connect;
 	}
 	
@@ -76,7 +81,6 @@ public class MainGui {
 		// Hauptlayout festelgen (Top, Bottom, Left, Right, Center)
 		BorderPane root = new BorderPane();
 		BorderPane.setAlignment(gamefield, Pos.TOP_CENTER);
-		BorderPane.setMargin(gamefield, new Insets(20, 0, 0, 0));
 		root.setCenter(gamefield);
 		
 		// Neue Spielstandanzeige erstellen
@@ -110,16 +114,21 @@ public class MainGui {
 				}
 			}
 		});
-		/*
-		// Eingabefeld fuer Verzeichnisangabe erstellen
-		TextField directoryInput = new TextField();
-		userInputVBox.getChildren().add(directoryInput);
-		*/
+		// Spieler das erste mal setzen
+		setSelectedPlayer();
+		
+		// Eingabefeld fuer Gegnername erstellen
+		TextField playernameInput = new TextField();
+		userInputVBox.getChildren().add(playernameInput);
+		
 		controlGroup.getChildren().add(userInputVBox);
 		
 		// Verzeichnisauswahl Button erstellen
-		Button chooseFolderButton = new Button("Verzeichnis waehlen");
-		chooseFolderButton.setPrefSize(200, 50);
+		Button chooseFolderButton = new Button();
+		Image folderIcon = new Image(getClass().getResourceAsStream("/images/folder_icon.png"));
+		chooseFolderButton.setGraphic(new ImageView(folderIcon));
+		chooseFolderButton.setText("Verzeichnis");
+		chooseFolderButton.setPrefSize(150, 40);
 		chooseFolderButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -127,10 +136,28 @@ public class MainGui {
 			}
 		});
 		controlGroup.getChildren().add(chooseFolderButton);
+		/*
+		// "Spielen" Button erstellen
+		Image playbuttonImage = new Image("/images/play_button.png", true);
+		ImageView playbuttonView = new ImageView(playbuttonImage);
+		controlGroup.getChildren().add(playbuttonView);
+		*/
+		
+		// Neues Spiel Button erstellen
+		Button newgameButton = new Button("Neues Spiel");
+		newgameButton.setPrefSize(150, 40);
+		newgameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				resetGame();
+			}
+		});
+		controlGroup.getChildren().add(newgameButton);
+		
 		// Start Button erstellen
-		Button startButton = new Button("Start");
-		startButton.setPrefSize(200, 50);
-		startButton.setOnAction(new EventHandler<ActionEvent>() {
+		Button playButton = new Button("Spielen");
+		playButton.setPrefSize(150, 40);
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				connect.startGame();
@@ -138,10 +165,11 @@ public class MainGui {
 				score.setHomeScore(score.getHomeScore() + 1);
 			}
 		});
-		controlGroup.getChildren().add(startButton);
+		controlGroup.getChildren().add(playButton);
+		
 		// Beenden Button erstellen
 		Button exitButton = new Button("Beenden");
-		exitButton.setPrefSize(200, 50);
+		exitButton.setPrefSize(150, 40);
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -151,13 +179,12 @@ public class MainGui {
 		});
 		controlGroup.getChildren().add(exitButton);
 		
-		
-		// Steuergruppe dem "Center" Bereich zuweisen
+		// Steuergruppe dem "Bottom" Bereich zuweisen
 		BorderPane.setAlignment(controlGroup, Pos.CENTER);
 		BorderPane.setMargin(controlGroup, new Insets(20, 20, 20, 20));
 		root.setBottom(controlGroup);
 		
-		Scene scene = new Scene(root, 1000, 800, bgColor);
+		Scene scene = new Scene(root, 1200, 900, bgColor);
 		mainStage.setTitle("4wins");
 		mainStage.setScene(scene);
 		mainStage.show();
@@ -178,6 +205,8 @@ public class MainGui {
 		ImageView playerXview = new ImageView(playerImages[player]);
 		playerXview.relocate(PLAYER_XOFFSET + HOLE_SPACING * column, PLAYER_YOFFSET + HOLE_SPACING * row);
 		gamefield.getChildren().add(playerXview);
+		// Stein der Liste hinzufuegen
+		playerItems.add(playerXview);
 	}
 	
 	/**
@@ -198,7 +227,16 @@ public class MainGui {
 		
 		//Show open file dialog
 		transferDirectory = directoryChooser.showDialog(null);
-		
-		connect.setTransferDirectory(transferDirectory.getPath());
+		if (transferDirectory != null) {
+			connect.setTransferDirectory(transferDirectory.getPath());
+		}
+	}
+	
+	/**
+	 * Loescht alle Steine auf dem Spielfeld und setzt das Spiel zurueck
+	 */
+	private void resetGame() {
+		gamefield.getChildren().removeAll(playerItems);
+		System.out.println("Spiel wurde resettet");
 	}
 }

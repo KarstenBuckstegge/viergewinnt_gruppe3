@@ -3,14 +3,13 @@ package controller;
 import java.io.IOException;
 
 import gui.MainGui;
-<<<<<<< HEAD
-=======
 import connect.Server_Connector;
->>>>>>> - Datenbank hinzugefuegt
+import connect.Server_Data;
+import logic.KI;
+import database.CrudDb;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import logic.KI;
 
 public class Main extends Application {
 	
@@ -20,17 +19,21 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage mainStage) throws InterruptedException, IOException {
-<<<<<<< HEAD
-		MainGui gui = new MainGui(null);
-=======
 		Server_Connector connect = new Server_Connector();
+		
 		MainGui gui = new MainGui(connect);
->>>>>>> - Datenbank hinzugefuegt
 		gui.initialize(mainStage);
 		
+		// CrudDB db = new CrudDB();
+		CrudDb db = null;
 		
-		KI ki = new KI();
+		KI ki = new KI(gui, connect, db);
 		ki.createField();
+		
+		Server_Data data = new Server_Data();
+		
+		gui.initialize(mainStage);
+		
 		// Variablen geben Spalte und Spieler an
 		
 		//ki.calculateNextMove();

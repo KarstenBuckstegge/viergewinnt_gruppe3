@@ -1,8 +1,11 @@
 package gui;
 
-//import connect.Connect;
+import connect.Server_Connector;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,7 +43,10 @@ public class MainGui {
 	
 	private int homePlayer = 0;
 	
-	private Connect connect = new Connect();
+	private Server_Connector connect = null;
+	
+	// Liste aller gesetzten Spielsteine erstellen
+	private ArrayList<ImageView> playerItems = new ArrayList<ImageView>();
 	
 	private Pane gamefield = new Pane();
 	
@@ -49,7 +55,8 @@ public class MainGui {
 	// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
 	final ToggleGroup togglePlayerGroup = new ToggleGroup();
 	
-	public MainGui(Connect connect) {
+	// Klassenkonstruktor
+	public MainGui(Server_Connector connect) {
 		this.connect = connect;
 	}
 	
@@ -89,6 +96,7 @@ public class MainGui {
 		// Vertikale Box fuer Benutzereingaben erstellen
 		VBox userInputVBox = new VBox();
 		userInputVBox.setSpacing(10);
+		
 		// RadioButton fuer Spieler O erstellen
 		RadioButton playerO = new RadioButton("Spieler O");
 		playerO.setToggleGroup(togglePlayerGroup);
@@ -96,12 +104,14 @@ public class MainGui {
 		playerO.setUserData(1);
 		playerO.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerO);
+		
 		// RadioButton fuer Spieler X erstellen
 		RadioButton playerX = new RadioButton("Spieler X");
 		playerX.setToggleGroup(togglePlayerGroup);
 		playerX.setUserData(2);
 		playerX.setTextFill(Color.WHITE);
 		userInputVBox.getChildren().add(playerX);
+		
 		// Eventlistener fuer Spielerauswahl erstellen
 		togglePlayerGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
@@ -110,6 +120,7 @@ public class MainGui {
 				}
 			}
 		});
+		
 		/*
 		// Eingabefeld fuer Verzeichnisangabe erstellen
 		TextField directoryInput = new TextField();
@@ -127,18 +138,39 @@ public class MainGui {
 			}
 		});
 		controlGroup.getChildren().add(chooseFolderButton);
+		
+		// Neuer Satz Button erstellen
+		Button resetButton = new Button("Neuer Satz");
+		resetButton.setPrefSize(200, 50);
+		resetButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				resetGame();
+			}
+		});
+		controlGroup.getChildren().add(resetButton);
+		
 		// Start Button erstellen
-		Button startButton = new Button("Start");
+		Button startButton = new Button("Spielen");
 		startButton.setPrefSize(200, 50);
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				connect.startGame();
+				try {
+					connect.startGame();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				setMove(homePlayer, 5, 5);
 				score.setHomeScore(score.getHomeScore() + 1);
 			}
 		});
 		controlGroup.getChildren().add(startButton);
+		
 		// Beenden Button erstellen
 		Button exitButton = new Button("Beenden");
 		exitButton.setPrefSize(200, 50);
@@ -150,7 +182,6 @@ public class MainGui {
 			}
 		});
 		controlGroup.getChildren().add(exitButton);
-		
 		
 		// Steuergruppe dem "Center" Bereich zuweisen
 		BorderPane.setAlignment(controlGroup, Pos.CENTER);
@@ -178,6 +209,7 @@ public class MainGui {
 		ImageView playerXview = new ImageView(playerImages[player]);
 		playerXview.relocate(PLAYER_XOFFSET + HOLE_SPACING * column, PLAYER_YOFFSET + HOLE_SPACING * row);
 		gamefield.getChildren().add(playerXview);
+		playerItems.add(playerXview);
 	}
 	
 	/**
@@ -200,5 +232,12 @@ public class MainGui {
 		transferDirectory = directoryChooser.showDialog(null);
 		
 		connect.setTransferDirectory(transferDirectory.getPath());
+	}
+	
+	/**
+	 * setzt das Spielfeld zurueck
+	 */
+	private void resetGame() {
+		gamefield.getChildren().removeAll(playerItems);
 	}
 }

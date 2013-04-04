@@ -20,6 +20,7 @@ public class KI {
 	// Variablen deklarieren
 	private int [][] field;
 	private int homePlayer = 1;
+	private boolean firstMove = true;
 	private MainGui gui = null;
 	private Server_Connector connect = null;
 	
@@ -45,6 +46,16 @@ public class KI {
 	
 //------------------------------ Berechnung der Zeile ------------------------------------
 
+	public void setEnemyMove(int column, int player) throws IOException {
+		setRow(column, player);
+		
+		if (firstMove == true) {
+			homePlayer = player;
+			firstMove = false;
+		}
+		
+	} 
+	
 	public int setRow(int column, int player) throws IOException{
 		/**
 		 * 

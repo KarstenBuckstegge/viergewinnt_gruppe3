@@ -137,7 +137,7 @@ public class MainGui {
 			@Override
 			public void handle(ActionEvent arg0) {
 				chooseTransferDirectory();
-				
+				//chooseFolderButton.setText(arg0);
 			}
 		});
 		controlGroup.getChildren().add(chooseFolderButton);

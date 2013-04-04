@@ -56,7 +56,7 @@ public class KI {
 		 * setEnemyMove verwertet den Gegnerzug der vom Server ausgelesen wurde 
 		 * und definiert ein mal ob der Agent Spieler X oder O ist
 		 */
-		
+		System.out.println("erfolgreich übergeben");
 		setRow(column, player, true);
 		
 		if (firstMove == true) {
@@ -95,7 +95,7 @@ public class KI {
 				gui.setMove(player, column, returnRow);
 				
 				if (enemyMove){
-					connect.setStoneWriteFile(column);
+					connect.writeFile(column);
 				}
 				
 				break; // beendet for-schleife

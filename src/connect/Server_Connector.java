@@ -28,6 +28,7 @@ public class Server_Connector {
 	 * Generiert die Datei-Namen zum Lesen und Schreiben der Spielzüge.
 	 * 
 	 */
+	
 	public void setPlayerID(int playerID)
 	{
 		this.playerID = playerID;
@@ -67,37 +68,12 @@ public class Server_Connector {
 	
 	
 	// Startet den ersten Lese-Vorgang
-	public void startGame() throws InterruptedException
+	public void startGame() throws InterruptedException, IOException
 	{
 		System.out.println("startGame() aufgerufen!");
-		Server_Data objekt = new Server_Data(fileNameFromServer, fileName2Server, transferDirectory);
-//		objekt.readFile();
-		
+		Server_Data objekt = new Server_Data(playerID, fileNameFromServer, fileName2Server, transferDirectory);
 	}
 		
-		
-		
-//		StringBuilder output = new StringBuilder();
-//		
-//		System.out.println("Dateiname fuer Info an den Server=" + fileName2Server);
-//		output.append(NEWLINE);
-//		System.out.println("Dateiname fuer Info vom Server=" + fileNameFromServer);
-		
-//		File fi = new File(fileNameFromServer);
-		
-//		String absPath = fi.getAbsolutePath();
-//		System.out.println("FilePath="+absPath);
-		
-//		try {
-//			fi.createNewFile();
-//		}
-//		catch (IOException e) {
-//			
-//			e.printStackTrace();	
-//		}
-		
-
-
 		
 		/**
 		 *  
@@ -118,79 +94,11 @@ public class Server_Connector {
 	public String getFileName2Server() {
 		
 		return fileName2Server;
-	}
-public String getFileNameFromServer() {
+	} // getFileName2Server
+	
+	public String getFileNameFromServer() {
 		
 		return fileNameFromServer;
-	}
-	
-		/**
-		 * Startet das Spiel, suchen nach Dateien vom Server
-		 * @throws IOException 
-		 * @throws FileNotFoundException 
-		 * 
-		 */
+	} // getFileName2Server
 
-		
-		
-		
-/*		public boolean readXMLFile(String fileName) 
-		{
-			// http://openbook.galileocomputing.de/javainsel9/javainsel_18_007.htm#mja3b868c348f3f738e42cfdbea9cbc8f6
-		    Document document;
-		    
-			try {
-				document = new SAXBuilder().build( fileName );
-			    String tmpString = "";
-			    Element elementContent = document.getRootElement();
-				System.out.println( elementContent );  // Test
-			    //if (tmp != null)  tmpString = tmp.toString();
-			    
-				// jetzt alle Werte lesen und im Objekt Server_Data "speichern"
-				Element field = elementContent.getChild("freigabe");
-			    tmpString = field.getValue();
-			    lastServerFile.setFreigabe(tmpString);
-
-			    field = elementContent.getChild("satzstatus");
-			    lastServerFile.setSatzstatus(field.getValue());
-
-			    field = elementContent.getChild("gegnerzug");
-			    tmpString = field.getValue();
-			    lastServerFile.setGegnerzug(Integer.parseInt(tmpString));
-
-			    field = elementContent.getChild("sieger");
-			    lastServerFile.setSieger(field.getValue());
-
-			    System.out.println( lastServerFile );  // Test
-			    
-			    // Package
-			    // http://javathreads.de/2010/04/mit-jaxb-einfach-von-xml-daten-zu-java-objekten/
-//			    JAXBContext jc;
-//				try {
-//					jc = JAXBContext.newInstance("srv_Connector");
-//				    Unmarshaller unmarshaller = jc.createUnmarshaller();
-	//
-//				    Server_Data sd = (Server_Data) unmarshaller.unmarshal(new File(fileName));
-//				} catch (JAXBException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-
-
-			    
-			} catch (JDOMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		    
-		    return true;
-		}
-*/		
-		
-	
-
-}
+} // class Server_Connector

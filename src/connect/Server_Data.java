@@ -20,27 +20,15 @@ public class Server_Data {
 	 * http://www.rgagnon.com/javadetails/java-0490.html
 	 */
 	
-	// Initialisierung von enemyMove
-	
-	
-	// Reserviert eine Objektinstanz für Server_Connector	
-//	Server_Connector connect = null;
-//	
-//	// Konstruktor ermöglicht Übergabe
-//	
-//	Server_Connector connect = new Server_Connector();
-//	
-//	public Server_Data(Server_Connector uebergabe) {
-//		connect = uebergabe;
-//	}
-//	
 	int enemyMove;
+	int playerID;
 	String fileNameFromServer;
 	String fileName2Server;
 	String transferDirectory;
 	
-	public Server_Data(String fileNameFromServer, String fileName2Server, String transferDirectory) throws InterruptedException
+	public Server_Data(int playerID, String fileNameFromServer, String fileName2Server, String transferDirectory) throws InterruptedException, IOException
 	{
+		this.playerID = playerID;
 		this.fileNameFromServer = fileNameFromServer;
 		this.fileName2Server = fileName2Server;
 		this.transferDirectory = transferDirectory;
@@ -50,11 +38,12 @@ public class Server_Data {
 	}
 
 	
-		public void readFile() throws InterruptedException
+		public void readFile() throws InterruptedException, IOException
 	{
 		
+		// Bedingung für do-Schleife
 		boolean ok = false;
-			
+		
 		
 		do{
 		
@@ -113,13 +102,11 @@ public class Server_Data {
 		
 		}while (ok==false);
 		
-	/*	KI give = new KI();
-		give.setRow(column, player)*/
+		KI give = new KI();
+		give.setEnemyMove(enemyMove, playerID);
 		
 	}// do
 		
-
-	
 
 	
 	public int getEnemyMove()

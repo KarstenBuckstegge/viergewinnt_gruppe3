@@ -6,6 +6,11 @@ import connect.Server_Connector;
 import java.io.IOException;
 import java.util.Random;
 
+// TODO Implementiere
+// Server_Data objekt = new Server_Data();
+// objekt.setStoneWriteFile(move);
+// (schreibt Datei auf Laufwerk, sobald Zug berechnet)
+
 public class KI {
 	 /**
 	   * KI stellt ein Spielfeld(Array) her. 
@@ -23,6 +28,7 @@ public class KI {
 	private boolean firstMove = true;
 	private MainGui gui = null;
 	private Server_Connector connect = null;
+
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
@@ -47,6 +53,9 @@ public class KI {
 //------------------------------ Berechnung der Zeile ------------------------------------
 
 	public void setEnemyMove(int column, int player) throws IOException {
+		
+		System.out.println(column);
+		
 		setRow(column, player);
 		
 		if (firstMove == true) {
@@ -61,11 +70,14 @@ public class KI {
 		 * 
 		 * setRow berechnet in welcher Zeile ein Stein angelegt werden muss, wenn die Spalte vorgegeben ist.
 		 */
+		System.out.println(column);
 		
 		// Falls erster Zug, starte Zugberechnung
 		if (column == -1){
-			column = randomMove();
+			column = 3;
 		}
+		
+		System.out.println(column);
 		
 		int returnRow = -1;
 		int currentValue = -1;
@@ -73,7 +85,8 @@ public class KI {
 		// step backwords from lower row up to top
 		for (int rowCounter = 5; rowCounter > 0; rowCounter--)
 		{
-			currentValue = field[column] [rowCounter];
+			System.out.println("column " + column + " rowCounter " + rowCounter);
+			currentValue = field[column][rowCounter];
 			
 			// prüfen ob diese Zeile noch frei ist
 			if ( currentValue == 0 )

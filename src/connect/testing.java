@@ -28,8 +28,8 @@ public class testing {
 		// Nach †bergabe der Werte das Spiel starten.
 		connect.startGame();
 		
-		Server_Data data = new Server_Data();
-		data.setStoneWriteFile(3);
+	//	Server_Data data = new Server_Data();
+		//data.setStoneWriteFile(3);
 			
 	
 

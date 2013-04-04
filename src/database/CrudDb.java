@@ -11,37 +11,55 @@ import java.util.ArrayList;
 /**
  * Die Verbindung zur Datenbank mit Connection aufbauen.
  * 
- * Öffentliches Objekt "zug" erstellt um später Züge aus der Datenbank herauslesen zu können.
+ * Oeffentliches Objekt "zug" erstellt um spaeter Zuege aus der Datenbank herauslesen zu koennen.
  */
 
 public class CrudDb {
 	
 	Connection con;
 	public Zug zug;
+	Agent agent = new Agent();
 	
-	/**
-	 * Der Konstruktor:
-	 * Die Klasse mit Hilfe von Class.forName(); laden.
-	 * Wenn die Klasse nicht geladen werden kann: throws Exception.
-	 * 
-	 * Treiber Manager: 
-	 * Datenbanktreiber, Datenbank-URL sowie Benutzername und Passwort werden hier angegeben.
-	 */
+	int sqlQuery
+	
+/**
+ * Der Konstruktor:
+ * Die Klasse mit Hilfe von Class.forName(); laden.
+ * Wenn die Klasse nicht geladen werden kann: throws Exception.
+ * 
+ * Treiber Manager: 
+ * Datenbanktreiber, Datenbank-URL sowie Benutzer (sa Superadmin) und Passwort werden hier angegeben.
+ */
+	
+	public CrudDb() {
+	}
 	
 	public CrudDb(String crud_db) throws Exception {
 		Class.forName("org.hsqldb.jdbcDriver");
 		con = DriverManager.getConnection(
 				"jdbc:hsqldb:" + crud_db,
-				"crud",
+				"sa",
 				"");
 	}
 	
+	public void setValues(int[] values){
+		int agentId = values[0];
+		int posX = values[1];
+		int posY = values[2];
+		
+		sqlQuery = "UPDATE zug SET agent_ID='" + agentId + "' WHERE gameId='"+ gameId +"'";
+	}
+	
 	/**
-	 * Methoden erstellen, die mit der Database kommunizieren.
-	 * update: Database füllen
-	 * select: Database-inhalte rausziehen
-	 * output: Ausgabe von SELECT, Statement schließen
-	 * end: Database herunterfahren
+	 * Methoden erstellen, die mit der Database kommunizieren!
+	 * 
+	 * Statement Objekt muss (in jeder Methode neu) gesetzt werden 
+	 * um SQL-Anweisungen zur Database schicken zu kï¿½nnen.
+	 * 
+	 * Methode update: Database fuellen
+	 * Statement stmt = null; --> Damit das Statement-Objekt 
+	 * auch ohne Wert keinen Fehler ausgibt
+	 * 
 	 */	
 	
 	public synchronized void update(String expression) throws SQLException {
@@ -54,6 +72,12 @@ public class CrudDb {
 		stmt.close();
 	}
 
+	/**
+	 * select: Database-inhalte rausziehen
+	 * 
+	 * ResultSet nimmt Bezug auf das Statement Objekt.
+	 */	
+	
 	public synchronized void select(String expression) throws SQLException {
 
 		Statement stmt = null;
@@ -66,6 +90,10 @@ public class CrudDb {
 		stmt.close();
 	}
 
+	/**
+	 * output: Ausgabe von SELECT, Statement schlieï¿½en
+	 */	
+	
 	public static void output(ResultSet rs) throws SQLException {
 
 		ResultSetMetaData meta = rs.getMetaData();
@@ -82,6 +110,10 @@ public class CrudDb {
 			System.out.println(" ");
 		}
 	}
+
+	/**
+	 * end: Database herunterfahren
+	 */	
 	
 	public void end() throws SQLException {
 
@@ -92,9 +124,9 @@ public class CrudDb {
 	}
 
 	/**
-	 * Methode um Zug setzen zu können:
-	 * Objekt zug wurde erstellt, um in getZug einen Rückgabewert zu erhalten
-	 * Methode um Zug aus Datenbank rekonstruieren zu können
+	 * Methode um Zug setzen zu kï¿½nnen:
+	 * Objekt zug wurde erstellt, um in getZug einen Rueckgabewert zu erhalten
+	 * Methode um Zug aus Datenbank rekonstruieren zu kï¿½nnen
 	 */	
 	
 	public void setZug(int column, int row) throws SQLException {
@@ -109,7 +141,7 @@ public class CrudDb {
 	}
 	
 	/**
-	 * Methode um den startspieler setzen zu können
+	 * Methode um den startspieler setzen zu kï¿½nnen
 	 */	
 	
 	public void setStartspieler(char startspieler) throws SQLException {
@@ -117,7 +149,7 @@ public class CrudDb {
 	}
 	
 	/**
-	 * Methode um den sieger setzen zu können
+	 * Methode um den sieger setzen zu kï¿½nnen
 	 */	
 	
 	public void setSieger(char sieger) throws SQLException {
@@ -125,7 +157,7 @@ public class CrudDb {
 	}
 	
 	/**
-	 * Methode um Gegnername angeben zu können
+	 * Methode um Gegnername angeben zu kï¿½nnen
 	 */
 	
 	public void saveOppName(char name) throws SQLException {
@@ -300,5 +332,12 @@ public class CrudDb {
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	public void setTableLine(){
+	//insert first row
+	sqlQuery = "INSERT INTO spiel VALUES (1,2);";
+	System.out.println(sqlQuery);
+	con.createStatement().executeUpdate(sqlQuery);
 	}
 }

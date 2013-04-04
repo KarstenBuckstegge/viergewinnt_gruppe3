@@ -1,7 +1,7 @@
 package logic;
 
 import gui.MainGui;
-import connect.Connect;
+import connect.Server_Connector;
 
 import java.io.IOException;
 import java.util.Random;
@@ -15,14 +15,17 @@ public class KI {
 	   * @param args
 	   */
 	
+//------------------------------ Initialisierung ------------------------------------
+	
 	// Variablen deklarieren
 	private int [][] field;
+	private int homePlayer = 1;
 	private MainGui gui = null;
-	private Connect connect = null;
+	private Server_Connector connect = null;
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
-		field = new int [6][7];
+		field = new int [7][6];
 		System.out.println("FIELD CREATED");
 	}
 	
@@ -32,16 +35,26 @@ public class KI {
 	}
 	
 	// Constructor
-	public KI(MainGui gui, Connect connect) {
+	public KI(MainGui gui, Server_Connector connect) {
 		this.gui = gui;
 		this.connect = connect;
 	}
 	
+	public KI() {
+	}
+	
+//------------------------------ Berechnung der Zeile ------------------------------------
+
 	public int setRow(int column, int player) throws IOException{
 		/**
 		 * 
 		 * setRow berechnet in welcher Zeile ein Stein angelegt werden muss, wenn die Spalte vorgegeben ist.
 		 */
+		
+		// Falls erster Zug, starte Zugberechnung
+		if (column == -1){
+			column = randomMove();
+		}
 		
 		int returnRow = -1;
 		int currentValue = -1;
@@ -56,33 +69,300 @@ public class KI {
 			{
 				returnRow = rowCounter;
 				field[column] [rowCounter] = player;
-				System.out.println("Stone droped in row " + returnRow + " and column " + column);
-				System.out.println("New Value=" + field [column][returnRow]);
+				System.out.println("Stone droped in row " + returnRow + " and column " + column + " with value " + field [column][returnRow]);
 				gui.setMove(player, column, returnRow);
 				
-				break; // beende for-schleife
+				break; // beendet for-schleife
 			}
 		}
 		
 		if (returnRow == -1)
 		{
 			System.out.println(String.format("Die Spalte %d ist bereits voll!", column));
+			int randomColumn = randomMove();
+			setRow(randomColumn, homePlayer);
 		}
 		
 		return returnRow;
 	}
+
+//------------------------------ Berechnung der eigenen Züge ------------------------------------
 	
-	public int calculateNextMove(int playerID) throws IOException{
+	public void calculateNextMove() throws IOException{
+		/**
+		 * 
+		 * calculateNextMove durchläuft die einzelnen Zeilen und Spalten auf der Suche nach Vierer-Chancen
+		 */
+		
+		int returnedValues[] = {-1, -1};
+		boolean winLoose = false;
+		
+		
+		//Durchlauf der Reihen
+		for (int i = 5; i >= 0; i--){
+			//Durchlauf der Spalten
+			for (int j = 0; j <= 6; j++) {
+				
+				// Suche nach Vierer-Chancen nach Zeilen, Spalten und rechten Diagonalen
+				if (j < 4 && i > 2){
+					returnedValues = getWinningColumn(j, i, 1);
+					winLoose = checkMove(returnedValues);
+					if (winLoose == true){
+						i = -1;
+						break;
+					}
+					returnedValues = getWinningColumn(j, i, 2);
+					winLoose = checkMove(returnedValues);
+					if (winLoose == true){
+						i = -1;
+						break;
+					}
+					
+					returnedValues = getWinningColumn(j, i, 3);
+					winLoose = checkMove(returnedValues);
+					if (winLoose == true){
+						i = -1;
+						break;
+					}
+				}
+				// Suche nach Vierer-Chancen nur Zeilen
+				else if (j < 4 && i <= 2){
+					returnedValues = getWinningColumn(j, i, 1);
+					winLoose = checkMove(returnedValues);
+					if (winLoose == true){
+						i = -1;
+						break;
+					}
+				}
+				else if (j == 5 && i == 0){
+					int randomColumn = randomMove();
+					setRow(randomColumn, homePlayer);
+				}
+
+				
+				// Suche nach Vierer-Chancen nach Spalten und linken Diagonalen
+				if (j > 3 && i > 2){
+					returnedValues = getWinningColumn(j, i, 4);
+					winLoose = checkMove(returnedValues);
+					if (winLoose == true){
+						i = -1;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	private boolean checkMove(int returnedValues[]) throws IOException{
+		
+		/**
+		 * 
+		 * checkMove betrachtet ob eine Vierer-Chance erkannt wurde 
+		 * und setzt diese Falls vorhanden in die GUI ein 
+		 */
+
+		int checkColumn = returnedValues[0];
+		int player = returnedValues[1];
+		
+//		if (player == homePlayer) {
+//			System.out.println("Winner");
+//		}
+//		else
+//		{
+//			System.out.println("Escaped death");
+//		}
+		
+		// betrachtet ob der Wert in der Zurückgegebenen Spalte ein Spieler ist und gibt falls vorhanden eine Sieg-/Niederlagenchance aus
+		if (checkColumn >= 0){
+			setRow(checkColumn, homePlayer);
+			System.out.println("Sieg-/Niederlagenchance in Spalte " + checkColumn + " von Spieler " + player);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	private int[] getWinningColumn(int tempColumn, int tempRow, int checkDir) throws IOException{
 		/**
 		 * 
 		 * calculateNextMove berechnet den nächsten Zug des Agents.
+		 */
+		// ----------- Testwerte -----------------
+//				
+//				int lempRow = tempRow-1;
+//				int mempRow = tempRow-2;
+//				int kempRow = tempRow-3;
+//				
+//				if (checkDir != 4){
+//				int lempColumn = tempColumn+1;
+//				int mempColumn = tempColumn+2;
+//				int kempColumn = tempColumn+3;
+//				
+//				field[tempColumn][tempRow] = 1;
+//				field[lempColumn][tempRow] = 0;
+//				field[mempColumn][tempRow] = 1;
+//				field[kempColumn][tempRow] = 1;
+//				
+//				field[tempColumn][tempRow] = 1;
+//				field[tempColumn][lempRow] = 1;
+//				field[tempColumn][mempRow] = 1;
+//				field[tempColumn][kempRow] = 0;
+//				
+//				field[tempColumn][tempRow] = 1;
+//				field[lempColumn][lempRow] = 0;
+//				field[mempColumn][mempRow] = 1;
+//				field[kempColumn][kempRow] = 1;
+//				}
+//				
+//				if (checkDir == 4){
+//				int sublempColumn = tempColumn-1;
+//				int submempColumn = tempColumn-2;
+//				int subkempColumn = tempColumn-3;
+//				
+//				field[tempColumn][tempRow] = 1;
+//				field[sublempColumn][lempRow] = 0;
+//				field[sublempColumn][lempRow-1] = 1;
+//				field[submempColumn][mempRow] = 1;
+//				field[subkempColumn][kempRow] = 1;
+//				}
+				
+				// -------- ENDE Testwerte --------------
+				
+				int startValue = field[tempColumn][tempRow];
+				int leftStartValue = -1;
+				int winCounter = 0;
+				int [] winArray = new int [2];
+				int gap = 0;
+				int gapPosition = 0;
+				int winColumn = -1;
+				int tempValue = 0;
+				int checkRow = 0;
+				int checkColumn = 0;
+				int gapCheckRow = 6;
+				int gapCheck = -1;
+				
+				for (int i = 0; i<4; i++) {
+					
+					// checken in der Zeile
+					if (checkDir == 1) {
+						checkColumn = i+tempColumn;
+						checkRow = tempRow;
+						tempValue = field[checkColumn][checkRow];
+					}
+					// checken in der Spalte
+					else if (checkDir == 2) {
+						checkRow = tempRow-i;
+						tempValue = field[tempColumn][checkRow];
+					}
+					// checken in der Diagonal rechts
+					else if (checkDir == 3) {
+						checkRow = tempRow - i;
+						checkColumn = tempColumn + i;
+						tempValue = field[checkColumn][checkRow];
+					}
+					// checken in der Diagonal links
+					else {
+						checkRow = tempRow - i;
+						checkColumn = tempColumn - i;
+						tempValue = field[checkColumn][checkRow];
+					}
+					
+					if (startValue == 0){
+						break;
+					}
+					// ist der Wert im aktuellen Feld gleich dem Wert aus dem Anfangsfeld?
+					else if (tempValue == startValue) {
+						winCounter++;
+					}
+					// befindet sich im aktuellen Feld eine Lücke?
+					else if (tempValue == 0 && gap == 0) {
+						gap++;
+						gapPosition = i;
+						gapCheckRow = checkRow + 1;
+					}
+					// befindet sich im aktuellen Feld eine zweite Lücke wird die Schleife unterbrochen
+					else if (tempValue == 0 && gap == 1 && checkDir == 1) {
+						break;
+					}
+					// befindet sich im aktuellen Feld ein anderer Stein wird die Schleife unterbrochen
+					else if (winCounter < 3 && tempValue != startValue && tempValue != 0) {
+						break;
+					}
+					// befinden sich weniger als drei Steine aufeinander wird die Schleife unterbrochen
+					else if (winCounter < 3 && tempValue == 0 && checkDir == 2 && gap == 1) {
+						break;
+					}
+					
+					// befindet sich unter einer Lücke kein Stein wird die Schleife unterbrochen
+					if (gapCheckRow > 5){
+						gapCheck = -1;
+					}
+					else{
+						gapCheck = field[checkColumn][gapCheckRow];
+					}
+					
+					if (tempValue == 0 && gap ==1 && gapCheck == 0 && checkDir != 2) {
+						break;
+					}
+					
+					// erkennt Sieg bei offenem Feld für Diagonale nach links
+					if (winCounter == 3 && gap == 1 && checkDir == 4){
+						winColumn = tempColumn - gapPosition;
+						System.out.println("1Win at Column " + winColumn);
+						winArray[0] = winColumn;
+						winArray[1] = startValue;
+						return winArray;
+					}
+					
+					// erkennt Sieg bei offenem Feld für Zeile und Diaglonale rechts
+					if (winCounter == 3 && gap == 1 && checkDir != 2){
+						winColumn = tempColumn + gapPosition;
+						System.out.println("2Win at Column " + winColumn);
+						winArray[0] = winColumn;
+						winArray[1] = startValue;
+						return winArray;
+					}
+					
+					// Wert links von der Startposition erkennen
+					if (tempColumn > 0){
+						leftStartValue = field[tempColumn - 1][tempRow];
+					}
+					
+					// erkennt Sieg bei offenem Feld vor der ersten Stelle
+					if (tempColumn > 0 && i >= 3 && winCounter == 3 && leftStartValue == 0 && checkDir != 2){
+						winColumn = tempColumn - 1;
+						System.out.println("3Win at Column " + winColumn);
+						winArray[0] = winColumn;
+						winArray[1] = startValue;
+						return winArray;
+					}
+					
+					// erkennt Sieg in einer Spalte
+					if (winCounter == 3 && gap == 1 && checkDir == 2){
+						winColumn = tempColumn;
+						System.out.println("Win at " + tempColumn + " by Column");
+						winArray[0] = winColumn;
+						winArray[1] = startValue;
+						return winArray;
+					}
+				} 
+				winArray[0] = -1;
+				winArray[1] = -1;
+				return winArray;
+	}
+	
+	public int randomMove() throws IOException{
+		/**
+		 * 
+		 * randomMove berechnet einen zufälligen Zug des Agents.
 		 */
 		int newValue = -1;
 		//int tmp = 0;
 		Random generator = new Random();
 		newValue = generator.nextInt(6);
 		//newValue = ctrlclass.COLUMNS - tmp - 1;
-		Connect.setStone(newValue);
+		//connect.setStone(newValue);
 		return newValue;
 	}
 }

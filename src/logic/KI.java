@@ -24,7 +24,7 @@ public class KI {
 	private MainGui gui = null;
 	private Server_Data connect = null;
 	
-	// Erstellen des Spielfeldes
+	// Erstellen des Spielfeldes.
 	public void createField(){
 		/**
 		 * 

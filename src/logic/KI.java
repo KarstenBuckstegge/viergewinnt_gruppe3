@@ -43,6 +43,7 @@ public class KI {
 	public KI(MainGui gui, Server_Connector connect, CrudDb db) {
 		this.gui = gui;
 		this.connect = connect;
+		this.connect.setKI(this);
 	}
 //------------------------------ Berechnung der Zeile ------------------------------------
 
@@ -91,11 +92,7 @@ public class KI {
 				gui.setMove(player, column, returnRow);
 				
 				if (enemyMove){
-<<<<<<< HEAD
-					connect.writeFile(column);
-=======
-					server_data.setStoneWriteFile(column);
->>>>>>> neuster stand
+					this.connect.setStone(column);
 				}
 				
 				break; // beendet for-schleife

@@ -30,10 +30,6 @@ public class Main extends Application {
 		KI ki = new KI(gui, connect, db);
 		ki.createField();
 		
-		Server_Data data = new Server_Data();
-		
-		gui.initialize(mainStage);
-		
 		// Variablen geben Spalte und Spieler an
 		
 		//ki.calculateNextMove();

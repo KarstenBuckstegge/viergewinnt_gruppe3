@@ -1,10 +1,10 @@
 package logic;
 
 import gui.MainGui;
-import connect.Server_Data;
-
+import connect.Server_Connector;
 import java.io.IOException;
 import java.util.Random;
+import database.CrudDb;
 
 public class KI {
 	 /**
@@ -22,7 +22,7 @@ public class KI {
 	private int homePlayer = 0;
 	private boolean firstMove = true;
 	private MainGui gui = null;
-	private Server_Data connect = null;
+	private Server_Connector connect = null;
 	
 	// Erstellen des Spielfeldes.
 	public void createField(){
@@ -40,14 +40,10 @@ public class KI {
 	}
 	
 	// Constructor
-	public KI(MainGui gui,Server_Data connect) {
+	public KI(MainGui gui, Server_Connector connect, CrudDb db) {
 		this.gui = gui;
 		this.connect = connect;
 	}
-	
-	public KI() {
-	}
-	
 //------------------------------ Berechnung der Zeile ------------------------------------
 
 	public void setEnemyMove(int column, int player) throws IOException, InterruptedException {
@@ -95,7 +91,11 @@ public class KI {
 				gui.setMove(player, column, returnRow);
 				
 				if (enemyMove){
+<<<<<<< HEAD
 					connect.writeFile(column);
+=======
+					server_data.setStoneWriteFile(column);
+>>>>>>> neuster stand
 				}
 				
 				break; // beendet for-schleife

@@ -55,6 +55,8 @@ public class MainGui {
 	
 	private Color bgColor = Color.rgb(31, 31, 31);
 	
+	private Button chooseFolderButton = null;
+	
 	// Entscheidungs Gruppe fuer Spielerentscheidung erstellen
 	final ToggleGroup togglePlayerGroup = new ToggleGroup();
 	
@@ -131,13 +133,13 @@ public class MainGui {
 		controlGroup.getChildren().add(userInputVBox);
 		
 		// Verzeichnisauswahl Button erstellen
-		Button chooseFolderButton = new Button("Verzeichnis waehlen");
+		chooseFolderButton = new Button("Verzeichnis waehlen");
 		chooseFolderButton.setPrefSize(200, 30);
 		chooseFolderButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				chooseTransferDirectory();
-				//chooseFolderButton.setText(arg0);
+				String directoryString = chooseTransferDirectory();
+				chooseFolderButton.setText(directoryString);
 			}
 		});
 		controlGroup.getChildren().add(chooseFolderButton);

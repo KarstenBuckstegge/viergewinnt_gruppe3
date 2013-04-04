@@ -9,7 +9,7 @@ import java.util.Random;
 // TODO Implementiere
 // Server_Data objekt = new Server_Data();
 // objekt.setStoneWriteFile(move);
-// (schreibt Datei auf Laufwerk, sobald Zug berechnet)
+// (schreibt Datei auf Laufwerk, sobald Zug berechnet).
 
 public class KI {
 	 /**

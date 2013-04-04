@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -29,6 +30,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.DirectoryChooser;
 
 public class MainGui {
@@ -121,27 +124,27 @@ public class MainGui {
 			}
 		});
 		
-		/*
-		// Eingabefeld fuer Verzeichnisangabe erstellen
-		TextField directoryInput = new TextField();
-		userInputVBox.getChildren().add(directoryInput);
-		*/
+		// Eingabefeld fuer gegnerischen Spielernamen
+		TextField opponentNameInput = new TextField();
+		userInputVBox.getChildren().add(opponentNameInput);
+		
 		controlGroup.getChildren().add(userInputVBox);
 		
 		// Verzeichnisauswahl Button erstellen
 		Button chooseFolderButton = new Button("Verzeichnis waehlen");
-		chooseFolderButton.setPrefSize(200, 50);
+		chooseFolderButton.setPrefSize(200, 30);
 		chooseFolderButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				chooseTransferDirectory();
+				
 			}
 		});
 		controlGroup.getChildren().add(chooseFolderButton);
 		
 		// Neuer Satz Button erstellen
 		Button resetButton = new Button("Neuer Satz");
-		resetButton.setPrefSize(200, 50);
+		resetButton.setPrefSize(150, 30);
 		resetButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -152,7 +155,7 @@ public class MainGui {
 		
 		// Start Button erstellen
 		Button startButton = new Button("Spielen");
-		startButton.setPrefSize(200, 50);
+		startButton.setPrefSize(150, 30);
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -173,7 +176,7 @@ public class MainGui {
 		
 		// Beenden Button erstellen
 		Button exitButton = new Button("Beenden");
-		exitButton.setPrefSize(200, 50);
+		exitButton.setPrefSize(150, 30);
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -183,12 +186,23 @@ public class MainGui {
 		});
 		controlGroup.getChildren().add(exitButton);
 		
+		// DropDown Menue fuer Historie erstellen
+		ObservableList<String> options = 
+			FXCollections.observableArrayList(
+				"Option 1",
+				"Option 2",
+				"Option 3"
+			);
+		ComboBox gameHistorySelect = new ComboBox(options);
+		gameHistorySelect.setPrefSize(150, 30);
+		controlGroup.getChildren().add(gameHistorySelect);
+		
 		// Steuergruppe dem "Center" Bereich zuweisen
 		BorderPane.setAlignment(controlGroup, Pos.CENTER);
 		BorderPane.setMargin(controlGroup, new Insets(20, 20, 20, 20));
 		root.setBottom(controlGroup);
 		
-		Scene scene = new Scene(root, 1000, 800, bgColor);
+		Scene scene = new Scene(root, 1200, 850, bgColor);
 		mainStage.setTitle("4wins");
 		mainStage.setScene(scene);
 		mainStage.show();
@@ -223,7 +237,7 @@ public class MainGui {
 	/**
 	 * Transfverzeichnis auswaehlen 
 	 */
-	private void chooseTransferDirectory() {
+	private String chooseTransferDirectory() {
 		File transferDirectory = null;
 		
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -231,7 +245,14 @@ public class MainGui {
 		//Show open file dialog
 		transferDirectory = directoryChooser.showDialog(null);
 		
-		connect.setTransferDirectory(transferDirectory.getPath());
+		if (transferDirectory != null) {
+			String directoryString = transferDirectory.getPath();
+			connect.setTransferDirectory(directoryString);
+			
+			return directoryString;
+		} else {
+			return "Verzeichnis waehlen";
+		}
 	}
 	
 	/**

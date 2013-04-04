@@ -156,7 +156,7 @@ public class Server_Data {
 		System.out.println("WriteFile aufgerufen!");
 		System.out.println(fileName2Server);
 		int move = column;
-		FileWriter fw = new FileWriter(transferDirectory+fileName2Server);
+		FileWriter fw = new FileWriter(transferDirectory+"/"+fileName2Server);
 	    BufferedWriter bw = new BufferedWriter(fw);	    
 	    bw.write(String.valueOf(move));
 	    bw.close();

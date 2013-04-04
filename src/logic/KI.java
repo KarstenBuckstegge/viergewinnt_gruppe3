@@ -1,15 +1,10 @@
 package logic;
 
 import gui.MainGui;
-import connect.Server_Connector;
+import connect.Server_Data;
 
 import java.io.IOException;
 import java.util.Random;
-
-// TODO Implementiere
-// Server_Data objekt = new Server_Data();
-// objekt.setStoneWriteFile(move);
-// (schreibt Datei auf Laufwerk, sobald Zug berechnet).
 
 public class KI {
 	 /**
@@ -24,14 +19,17 @@ public class KI {
 	
 	// Variablen deklarieren
 	private int [][] field;
-	private int homePlayer = 1;
+	private int homePlayer = 0;
 	private boolean firstMove = true;
 	private MainGui gui = null;
-	private Server_Connector connect = null;
-
+	private Server_Data connect = null;
 	
 	// Erstellen des Spielfeldes
 	public void createField(){
+		/**
+		 * 
+		 * createField initialisiert das Array in welchem die Logik agiert
+		 */
 		field = new int [7][6];
 		System.out.println("FIELD CREATED");
 	}
@@ -42,7 +40,7 @@ public class KI {
 	}
 	
 	// Constructor
-	public KI(MainGui gui, Server_Connector connect) {
+	public KI(MainGui gui,Server_Data connect) {
 		this.gui = gui;
 		this.connect = connect;
 	}
@@ -52,11 +50,14 @@ public class KI {
 	
 //------------------------------ Berechnung der Zeile ------------------------------------
 
-	public void setEnemyMove(int column, int player) throws IOException {
+	public void setEnemyMove(int column, int player) throws IOException, InterruptedException {
+		/**
+		 * 
+		 * setEnemyMove verwertet den Gegnerzug der vom Server ausgelesen wurde 
+		 * und definiert ein mal ob der Agent Spieler X oder O ist
+		 */
 		
-		System.out.println(column);
-		
-		setRow(column, player);
+		setRow(column, player, true);
 		
 		if (firstMove == true) {
 			homePlayer = player;
@@ -65,19 +66,17 @@ public class KI {
 		
 	} 
 	
-	public int setRow(int column, int player) throws IOException{
+	public int setRow(int column, int player, boolean enemyMove) throws IOException, InterruptedException{
 		/**
 		 * 
-		 * setRow berechnet in welcher Zeile ein Stein angelegt werden muss, wenn die Spalte vorgegeben ist.
+		 * setRow berechnet in welcher Zeile ein Stein angelegt werden muss, wenn die Spalte vorgegeben ist
+		 * und gibt den Zug an die entsprechenden Stellen weiter
 		 */
-		System.out.println(column);
 		
 		// Falls erster Zug, starte Zugberechnung
 		if (column == -1){
 			column = 3;
 		}
-		
-		System.out.println(column);
 		
 		int returnRow = -1;
 		int currentValue = -1;
@@ -85,8 +84,7 @@ public class KI {
 		// step backwords from lower row up to top
 		for (int rowCounter = 5; rowCounter > 0; rowCounter--)
 		{
-			System.out.println("column " + column + " rowCounter " + rowCounter);
-			currentValue = field[column][rowCounter];
+			currentValue = field[column] [rowCounter];
 			
 			// prüfen ob diese Zeile noch frei ist
 			if ( currentValue == 0 )
@@ -96,6 +94,10 @@ public class KI {
 				System.out.println("Stone droped in row " + returnRow + " and column " + column + " with value " + field [column][returnRow]);
 				gui.setMove(player, column, returnRow);
 				
+				if (enemyMove){
+					connect.setStoneWriteFile(column);
+				}
+				
 				break; // beendet for-schleife
 			}
 		}
@@ -104,7 +106,7 @@ public class KI {
 		{
 			System.out.println(String.format("Die Spalte %d ist bereits voll!", column));
 			int randomColumn = randomMove();
-			setRow(randomColumn, homePlayer);
+			setRow(randomColumn, homePlayer, false);
 		}
 		
 		return returnRow;
@@ -112,7 +114,7 @@ public class KI {
 
 //------------------------------ Berechnung der eigenen Züge ------------------------------------
 	
-	public void calculateNextMove() throws IOException{
+	public void calculateNextMove() throws IOException, InterruptedException{
 		/**
 		 * 
 		 * calculateNextMove durchläuft die einzelnen Zeilen und Spalten auf der Suche nach Vierer-Chancen
@@ -160,7 +162,7 @@ public class KI {
 				}
 				else if (j == 5 && i == 0){
 					int randomColumn = randomMove();
-					setRow(randomColumn, homePlayer);
+					setRow(randomColumn, homePlayer, false);
 				}
 
 				
@@ -177,7 +179,7 @@ public class KI {
 		}
 	}
 	
-	private boolean checkMove(int returnedValues[]) throws IOException{
+	private boolean checkMove(int returnedValues[]) throws IOException, InterruptedException{
 		
 		/**
 		 * 
@@ -198,7 +200,7 @@ public class KI {
 		
 		// betrachtet ob der Wert in der Zurückgegebenen Spalte ein Spieler ist und gibt falls vorhanden eine Sieg-/Niederlagenchance aus
 		if (checkColumn >= 0){
-			setRow(checkColumn, homePlayer);
+			setRow(checkColumn, homePlayer, false);
 			System.out.println("Sieg-/Niederlagenchance in Spalte " + checkColumn + " von Spieler " + player);
 			return true;
 		}
@@ -210,7 +212,7 @@ public class KI {
 	private int[] getWinningColumn(int tempColumn, int tempRow, int checkDir) throws IOException{
 		/**
 		 * 
-		 * calculateNextMove berechnet den nächsten Zug des Agents.
+		 * getWinningColumn durchsuch das Array field[][] nach Chancen auf Viererreihen
 		 */
 		// ----------- Testwerte -----------------
 //				
@@ -379,7 +381,7 @@ public class KI {
 	public int randomMove() throws IOException{
 		/**
 		 * 
-		 * randomMove berechnet einen zufälligen Zug des Agents.
+		 * randomMove berechnet einen zufälligen Zug des Agents
 		 */
 		int newValue = -1;
 		//int tmp = 0;

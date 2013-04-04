@@ -21,8 +21,6 @@ public class Server_Connector {
 	private String transferDirectory = ".\\Transfer";
 	private int movetime = 2000;
 	
-	
-	
 	/**
 	 * GUI setzt mit dieser Methode den Spieler (playerID).
 	 * Generiert die Datei-Namen zum Lesen und Schreiben der Spielzuege.

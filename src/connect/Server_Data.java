@@ -14,10 +14,14 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
 
 /**
- * <pre>
  * Klasse Server_Data:
+ <ul>
+  <li>Probieren geht &uuml;ber Studieren</li>
+  <li>Liebe geht &uuml;ber Triebe</li>
+  <li>Tante f&auml;llt &uuml;ber Kante</li>
+</ul>
  * 
- * - Liest Server-File * 
+ * - Liest Server-File 
  * 
  * - Gibt Gegnerzug an Logik weiter
  * 
@@ -52,19 +56,19 @@ public class Server_Data {
 		this.fileName2Server = fileName2Server;
 		this.transferDirectory = transferDirectory;
 		
-		readFile();
+		// readFile();
 		
 	}
 	
 	/**
 	 * Alternativer Konstruktor Server_Data() ohne Parameterliste
 	 */
-	public Server_Data(){}
+	//public Server_Data(){}
 	
 	/**
 	 * Methode readFile() steuert alle Abläufe zum Lesen des Server-Files
 	 */
-	public void readFile() throws InterruptedException, IOException
+	public int readFile() throws InterruptedException, IOException
 	{
 		
 		/**
@@ -135,10 +139,11 @@ public class Server_Data {
 		
 		}while (read_success==false);
 		
-		KI give = new KI();
-		give.createField();
 		
-		give.setEnemyMove(enemyMove, playerID);
+		return enemyMove;
+		
+		//KI give = new KI();
+		//give.setEnemyMove(enemyMove, playerID);
 		
 		
 	}// do
@@ -146,7 +151,7 @@ public class Server_Data {
 	/**
 	 * Übernimmt die von logic berechnete Spalte (den Spielzug) und schreibt das Agentfile.
 	 */
-	public void setStoneWriteFile(int column) throws IOException, InterruptedException
+	public void writeFile(int column) throws IOException, InterruptedException
 	{
 		System.out.println("WriteFile aufgerufen!");
 		System.out.println(fileName2Server);
@@ -155,8 +160,10 @@ public class Server_Data {
 	    BufferedWriter bw = new BufferedWriter(fw);	    
 	    bw.write(String.valueOf(move));
 	    bw.close();
-	    readFile();
+	    // readFile();
 	}
+
+	
 	
 	
 }

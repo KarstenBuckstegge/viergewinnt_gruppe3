@@ -2,6 +2,7 @@ package connect;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import logic.KI;
 
 /**
  * @author Christian Samide
@@ -20,6 +21,15 @@ public class Server_Connector {
 	private String fileNameFromServer = "";
 	private String transferDirectory = ".\\Transfer";
 	private int movetime = 2000;
+	
+	private KI ki = null;
+	private Server_Data data = null;
+	private int column;
+	
+	public void setKI(KI ki) {
+		
+		this.ki=ki;
+	}
 	
 	/**
 	 * GUI setzt mit dieser Methode den Spieler (playerID).
@@ -69,9 +79,25 @@ public class Server_Connector {
 	public void startGame() throws InterruptedException, IOException
 	{
 		System.out.println("startGame() aufgerufen!");
-		Server_Data objekt = new Server_Data(playerID, fileNameFromServer, fileName2Server, transferDirectory);
-	}
+		this.data = new Server_Data(playerID, fileNameFromServer, fileName2Server, transferDirectory);
 		
+		int give = data.readFile();
+			
+		ki.setEnemyMove(give, playerID);
+		
+		
+	}
+	
+	
+	public void setStone(int column) throws IOException, InterruptedException {
+		
+		this.column  = column;
+		data.writeFile(column);
+		
+		int give = data.readFile();		
+		ki.setEnemyMove(give, playerID);
+		
+	}
 		
 		/**
 		 *  

@@ -36,12 +36,14 @@ public class Server_Data {
 		readFile();
 		
 	}
+	
+	public Server_Data(){}
 
 	
 		public void readFile() throws InterruptedException, IOException
 	{
 		
-		// Bedingung für do-Schleife
+		// Bedingung fuer do-Schleife
 		boolean ok = false;
 		
 		
@@ -49,7 +51,7 @@ public class Server_Data {
 		
 			Document doc = null;
 			File f = new File(transferDirectory+fileNameFromServer+"");
-			System.out.println("Prüfe ob File da ist...");
+			System.out.println("Pr√ºfe ob File da ist...");
 
 				if (f.exists())
 			{
@@ -103,6 +105,7 @@ public class Server_Data {
 		}while (ok==false);
 		
 		KI give = new KI();
+		give.createField();
 		give.setEnemyMove(enemyMove, playerID);
 		
 	}// do

@@ -15,6 +15,7 @@ public class testing {
 		// Server_Connector-Objekt erzeugen
 		Server_Connector connect = new Server_Connector();
 		
+		
 		// Eine PlayerID übergeben (wichtig für GUI)
 		connect.setPlayerID(1);
 		
@@ -26,6 +27,9 @@ public class testing {
 		
 		// Nach Übergabe der Werte das Spiel starten.
 		connect.startGame();
+		
+		Server_Data data = new Server_Data();
+		data.setStoneWriteFile(3);
 			
 	
 

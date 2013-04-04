@@ -25,7 +25,7 @@ public class Server_Connector {
 	
 	/**
 	 * GUI setzt mit dieser Methode den Spieler (playerID).
-	 * Generiert die Datei-Namen zum Lesen und Schreiben der Spielzüge.
+	 * Generiert die Datei-Namen zum Lesen und Schreiben der Spielzuege.
 	 * 
 	 */
 	

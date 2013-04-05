@@ -15,6 +15,6 @@ public class main extends Application {
 		MainGui gui = new MainGui(connect);
 		gui.initialize(mainStage);
 		
-		gui.setMove(1, 3, 5);
+		//gui.setMove(1, 3, 5);
 	}
 }

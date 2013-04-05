@@ -60,7 +60,6 @@ public class KI {
 			homePlayer = player;
 			firstMove = false;
 		}
-		
 	} 
 	
 	public int setRow(int column, int player, boolean enemyMove) throws IOException, InterruptedException{

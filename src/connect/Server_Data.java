@@ -4,6 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.application.Platform;
 
 import logic.KI;
 
@@ -42,6 +46,8 @@ public class Server_Data {
 	String fileName2Server;
 	String transferDirectory;
 	
+	private KI ki = null;
+	
 	/**
 	 *	Konstruktor Server_Data() mit Parameterliste
 	 *
@@ -64,86 +70,108 @@ public class Server_Data {
 	 * Alternativer Konstruktor Server_Data() ohne Parameterliste
 	 */
 	//public Server_Data(){}
+	private boolean read_success = false;
+	Timer fileListener = new Timer("filelistener");
 	
+	int timeCounter = 0;
 	/**
 	 * Methode readFile() steuert alle Abläufe zum Lesen des Server-Files
 	 */
-	public int readFile() throws InterruptedException, IOException
+	public void readFile(KI ki) throws InterruptedException, IOException
 	{
+		timeCounter++;
+		fileListener = new Timer("filelistener_" + timeCounter);
+		
+		
+		this.ki = ki;
 		/**
 		 * Initialisierung der Variable read_success.
 		 */
-		boolean read_success = false;	
 		
 		/**
 		 * Schleife steuert Lese-Vorgang
 		 * solange read_success = false
 		 * Abbruchbedingung: read_success = true
 		 */
-		do{
-			Document doc = null;
-			File f = new File(transferDirectory+"/"+fileNameFromServer+"");
-			System.out.println("Prüfe ob File da ist...");
-
-			if (f.exists())
-			{
-				System.out.println("File ist da. Beginne lesen...");
-					try { 
-						
-						// Das Dokument erstellen 
-						SAXBuilder builder = new SAXBuilder(); 
-						doc = builder.build(f);
-						
-						XMLOutputter fmt = new XMLOutputter();            
-						Element element = doc.getRootElement();            
-						
-						// Freigabe lesen
-						Element freigabe = element.getChild("freigabe"); 
-						System.out.println("Freigabe: " + freigabe.getValue());
-						
-						// Satzstatus lesen
-						Element satzstatus = element.getChild("satzstatus"); 
-						System.out.println("Satzstatus: " + satzstatus.getValue());
-						
-						// Gegnerzug lesen
-						Element gegnerzug = element.getChild("gegnerzug"); 
-						System.out.println("Gegnerzug: " + gegnerzug.getValue());
-						
-						enemyMove = Integer.parseInt(gegnerzug.getValue());
-						System.out.println("Ergebnis ist : "+enemyMove);
-						read_success=true;
-						f.delete();
-						
-						// Sieger lesen
-						Element sieger = element.getChild("gegnerzug"); 
-						System.out.println("Sieger: " + sieger.getValue());       
-						
-						
-						
-					} catch (JDOMException e) { 
-						e.printStackTrace(); 
-					} catch (IOException e) { 
-						e.printStackTrace(); 
-					}
-					
-			}//if
-			else {
-					read_success=false;
-					Thread.sleep(6000);
-					Thread.yield();
-					System.out.println("300 ms warten...");
-			}//else
 		
-		}while (read_success==false);
+		TimerTask task = new TimerTask() {
+			public synchronized void run() {
+				Platform.runLater(this);
+				
+				File f = new File(transferDirectory+"/"+fileNameFromServer+"");
+				System.out.println("Prüfe ob File da ist...");
+				
+				if (f.exists())
+				{
+					System.out.println("Datei gefunden");
+					parseXmlFile(f);
+					continueMove();
+				} else {
+					// mach nix
+				}
+			}
+		};
 		
-		
-		return enemyMove;
-		
-		//KI give = new KI();
-		//give.setEnemyMove(enemyMove, playerID);
-		
+		this.fileListener.schedule(task, 6000, 6000);
 		
 	}// do
+	
+	private void continueMove() {
+		try {
+			this.ki.setEnemyMove(enemyMove, playerID);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private int parseXmlFile(File f) {
+		this.fileListener.cancel();
+		
+		System.out.println("File ist da. Beginne lesen...");
+		try { 
+			Document doc = null;
+			
+			// Das Dokument erstellen 
+			SAXBuilder builder = new SAXBuilder(); 
+			doc = builder.build(f);
+			
+			XMLOutputter fmt = new XMLOutputter();
+			Element element = doc.getRootElement();
+			
+			// Freigabe lesen
+			Element freigabe = element.getChild("freigabe"); 
+			System.out.println("Freigabe: " + freigabe.getValue());
+			
+			// Satzstatus lesen
+			Element satzstatus = element.getChild("satzstatus"); 
+			System.out.println("Satzstatus: " + satzstatus.getValue());
+			
+			// Gegnerzug lesen
+			Element gegnerzug = element.getChild("gegnerzug"); 
+			System.out.println("Gegnerzug: " + gegnerzug.getValue());
+			
+			enemyMove = Integer.parseInt(gegnerzug.getValue());
+			System.out.println("Ergebnis ist : "+enemyMove);
+			read_success = true;
+			f.delete();
+			
+			// Sieger lesen
+			Element sieger = element.getChild("gegnerzug"); 
+			System.out.println("Sieger: " + sieger.getValue());
+			
+		} catch (JDOMException e) { 
+			e.printStackTrace(); 
+		} catch (IOException e) { 
+			e.printStackTrace(); 
+		}
+		
+		System.out.println("Der gelesene Zug ist " + enemyMove);
+		return enemyMove;
+	}
 	
 	/**
 	 * Übernimmt die von logic berechnete Spalte (den Spielzug) und schreibt das Agentfile.
@@ -154,9 +182,13 @@ public class Server_Data {
 		System.out.println(fileName2Server);
 		int move = column;
 		FileWriter fw = new FileWriter(transferDirectory+"/"+fileName2Server);
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(String.valueOf(move));
-		bw.close();
-		// readFile();
+	    BufferedWriter bw = new BufferedWriter(fw);	    
+	    bw.write(String.valueOf(move));
+	    bw.close();
+	    // readFile();
 	}
+
+	
+	
+	
 }

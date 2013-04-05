@@ -170,8 +170,6 @@ public class MainGui {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				setMove(homePlayer, 5, 5);
-				score.setHomeScore(score.getHomeScore() + 1);
 			}
 		});
 		controlGroup.getChildren().add(startButton);

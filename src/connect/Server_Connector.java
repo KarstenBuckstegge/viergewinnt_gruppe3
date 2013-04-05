@@ -81,9 +81,9 @@ public class Server_Connector {
 		System.out.println("startGame() aufgerufen!");
 		this.data = new Server_Data(playerID, fileNameFromServer, fileName2Server, transferDirectory);
 		
-		int give = data.readFile();
+		data.readFile(ki);
 			
-		ki.setEnemyMove(give, playerID);
+		//ki.setEnemyMove(give, playerID);
 		
 		
 	}
@@ -94,9 +94,8 @@ public class Server_Connector {
 		this.column  = column;
 		data.writeFile(column);
 		
-		int give = data.readFile();		
-		ki.setEnemyMove(give, playerID);
-		
+		data.readFile(ki);		
+		//ki.setEnemyMove(give, playerID);
 	}
 		
 		/**
